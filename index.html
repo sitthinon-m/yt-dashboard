@@ -161,11 +161,48 @@
     .channel-card .crow:last-child { border-bottom: 0; }
     .channel-card .k { color: var(--muted); }
     .channel-card .v { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; }
+
+    .video-cards { display: none; gap: 10px; margin: 8px 0 16px; }
+    .video-card {
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: var(--glass);
+      border: 1px solid var(--line);
+    }
+    .video-card .video-title {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+      font-weight: 600;
+      line-height: 1.35;
+      margin: 0 0 10px;
+      color: inherit;
+      text-decoration: none;
+    }
+    .video-card a.video-title { color: var(--accent); }
+    .video-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+    }
+    .video-stats .stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 0.86rem;
+    }
+    .video-stats .k { color: var(--muted); }
+    .video-stats .v { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; }
     @media (max-width: 640px) {
       .h-wide { display: none; }
       .h-narrow { display: inline; }
       .channel-table-wrap { display: none; }
       .channel-cards { display: grid; }
+      .video-table-wrap { display: none; }
+      .video-cards { display: grid; }
     }
     table { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin: 12px 0 16px; }
     th, td { text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -575,6 +612,7 @@
         thPair("วินาที", "วินาที"),
       ])));
       const body = el("tbody");
+      const cards = el("div", { class: "video-cards" });
       for (const v of videos) {
         const title = v.url
           ? el("a", { href: v.url, target: "_blank", rel: "noopener", text: v.title || v.id })
@@ -589,9 +627,33 @@
           ctrCell(v.ctr_percent, snapshotVideoCtr(v.id)),
           el("td", { text: v.duration_seconds == null ? "—" : fmt(v.duration_seconds) }),
         ]));
+        const card = el("article", { class: "video-card" });
+        const titleEl = v.url
+          ? el("a", { href: v.url, target: "_blank", rel: "noopener", class: "video-title", text: v.title || v.id })
+          : el("div", { class: "video-title", text: v.title || v.id });
+        card.append(titleEl);
+        const stats = el("div", { class: "video-stats" });
+        const addStat = (k, vNode) => {
+          const row = el("div", { class: "stat" });
+          row.append(el("span", { class: "k", text: k }));
+          const val = el("span", { class: "v" });
+          if (typeof vNode === "string") val.append(vNode);
+          else val.append(vNode);
+          row.append(val);
+          stats.append(row);
+        };
+        addStat("ตลอดชีพ", fmt(v.views_lifetime));
+        addStat("28 วัน", fmt(views28));
+        addStat("ติดตาม", fmt(v.subscribers));
+        addStat("% ดู", fmtPct(v.average_percentage_viewed));
+        addStat("CTR", appendCtr(el("span"), v.ctr_percent, snapshotVideoCtr(v.id)));
+        addStat("ยาว", v.duration_seconds == null ? "—" : fmt(v.duration_seconds) + " วิ");
+        card.append(stats);
+        cards.append(card);
       }
       table.append(body);
-      wrap.append(wrapTable(table));
+      wrap.append(el("div", { class: "video-table-wrap" }, wrapTable(table)));
+      wrap.append(cards);
       return wrap;
     }
 
