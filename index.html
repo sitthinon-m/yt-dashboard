@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>แดชบอร์ดช่อง YouTube — 22 ต.ค.–18 พ.ย. 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=Prompt:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+  <script src="config.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    :root {
+      --bg0: #07081a;
+      --bg1: #14123c;
+      --bg2: #0b1630;
+      --glass: rgba(255,255,255,0.07);
+      --glass-2: rgba(255,255,255,0.1);
+      --text: #f7f6ff;
+      --muted: #b4b1c9;
+      --line: rgba(255,255,255,0.14);
+      --accent: #8ea8ff;
+      --accent-2: #f5b942;
+      --accent-3: #3ee0c5;
+      --warn: #ffb086;
+      --lion: #f5b942;
+      --ai: #3ee0c5;
+      --raisara: #c084fc;
+      --english: #fb7185;
+      --shadow: 0 18px 50px rgba(0,0,0,0.35);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Prompt", "Noto Sans Thai", "Sarabun", sans-serif;
+      background:
+        radial-gradient(1200px 700px at 8% -10%, rgba(88, 70, 200, 0.45), transparent 55%),
+        radial-gradient(900px 600px at 100% 0%, rgba(20, 180, 160, 0.22), transparent 50%),
+        radial-gradient(800px 500px at 70% 100%, rgba(245, 185, 66, 0.12), transparent 45%),
+        linear-gradient(165deg, var(--bg0), var(--bg1) 48%, var(--bg2));
+      background-attachment: fixed;
+      line-height: 1.55;
+    }
+    main { max-width: 1160px; margin: 0 auto; padding: 36px 20px 88px; position: relative; z-index: 1; }
+    h1, h2, h3, h4 { font-family: "Prompt", "Noto Sans Thai", sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+    h1 { font-size: clamp(1.8rem, 3vw, 2.3rem); line-height: 1.2; margin: 0 0 10px; }
+    h2 { font-size: 1.3rem; margin: 0 0 14px; }
+    h3 { font-size: 1.05rem; margin: 0 0 8px; }
+    p { margin: 0 0 12px; }
+    .lead, .muted, footer, .caveat, .ev { color: var(--muted); }
+    .lead { font-size: 1.08rem; margin-bottom: 18px; max-width: 46rem; }
+    nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; }
+    nav.toc a {
+      color: var(--text);
+      text-decoration: none;
+      background: var(--glass);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+    nav.toc a:hover { transform: translateY(-2px); background: var(--glass-2); border-color: rgba(255,255,255,0.28); }
+    .glass, section.source, section.block, .chart-card, .advice-card, .advice-action, .advice-week, .advice-test, .login, .placeholder, .metric, .kpi {
+      background: var(--glass);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+    section.source, section.block {
+      border-radius: var(--radius);
+      padding: 24px;
+      margin: 0 0 22px;
+    }
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 18px 0 22px; }
+    @media (max-width: 900px) { .metrics { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .metrics { grid-template-columns: 1fr; } }
+    .kpi {
+      border-radius: 20px;
+      padding: 18px 18px 16px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .kpi::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -40% auto;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: var(--kpi, var(--accent));
+      opacity: 0.16;
+      pointer-events: none;
+    }
+    .kpi:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); border-color: color-mix(in srgb, var(--kpi, var(--accent)) 55%, white); }
+    .kpi-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+    .kpi-icon {
+      width: 38px; height: 38px; border-radius: 12px;
+      display: grid; place-items: center;
+      background: color-mix(in srgb, var(--kpi, var(--accent)) 22%, transparent);
+      color: var(--kpi, var(--accent));
+    }
+    .kpi-icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .kpi-trend {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.75rem; font-weight: 600;
+      padding: 3px 8px; border-radius: 999px;
+      color: #073b2e; background: #3ee0c5;
+    }
+    .kpi-trend.neutral { color: var(--text); background: rgba(255,255,255,0.12); font-weight: 500; }
+    .kpi b, .kpi .kpi-value { display: block; font-size: clamp(1.6rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+    .kpi span, .kpi .kpi-label { color: var(--muted); font-size: 0.86rem; margin-top: 6px; display: block; }
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+    @media (max-width: 800px) { .charts { grid-template-columns: 1fr; } }
+    .chart-card { border-radius: 20px; padding: 16px 16px 10px; transition: transform 0.2s ease, border-color 0.2s ease; }
+    .chart-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.28); }
+    .chart-card h3 { margin-bottom: 4px; }
+    .chart-wrap { position: relative; height: 270px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin: 12px 0 16px; }
+    th, td { text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th:not(:first-child), td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+    th { font-weight: 600; color: var(--muted); font-size: 0.8rem; }
+    tr { transition: background 0.15s ease; }
+    tr:hover td { background: rgba(255,255,255,0.04); }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+    .tabs button {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 14px;
+      cursor: pointer;
+      font: inherit;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+    .tabs button:hover { transform: translateY(-2px); background: var(--glass-2); }
+    .tabs button[aria-pressed="true"] {
+      background: var(--tab, var(--accent));
+      color: #0b1020;
+      border-color: transparent;
+      font-weight: 600;
+    }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 0 0 20px; }
+    .updated { color: var(--muted); font-size: 0.95rem; }
+    .refresh-btn {
+      background: linear-gradient(135deg, #8ea8ff, #3ee0c5);
+      color: #0b1020;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 18px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 600;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    }
+    .refresh-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(62,224,197,0.25); }
+    .refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .refresh-status { color: var(--muted); font-size: 0.9rem; }
+    .refresh-status.err { color: var(--warn); }
+    .meaning { margin: 8px 0 0; }
+    .placeholder { border-style: dashed; border-radius: 16px; padding: 16px; color: var(--muted); box-shadow: none; }
+    .advice-grid { display: grid; gap: 18px; }
+    .advice-card { border-radius: 20px; padding: 20px; transition: transform 0.2s ease, border-color 0.2s ease; }
+    .advice-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.28); }
+    .advice-card h3 { margin: 0 0 10px; font-size: 1.15rem; }
+    .advice-handle { color: var(--muted); font-weight: 400; font-size: 0.9rem; }
+    .advice-list { margin: 0; padding-left: 1.15rem; }
+    .advice-list li { margin: 0 0 8px; }
+    .advice-block { margin-top: 16px; }
+    .advice-block h4 { margin: 0 0 8px; font-size: 0.92rem; color: var(--muted); }
+    .advice-actions { display: grid; gap: 10px; }
+    .advice-action {
+      border-radius: 16px;
+      padding: 12px 14px;
+      border-left: 4px solid var(--accent-3);
+      box-shadow: none;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+    .advice-action:hover { transform: translateY(-2px); }
+    .advice-action strong { display: block; margin-bottom: 4px; }
+    .advice-action .ev { font-size: 0.88rem; margin-top: 4px; }
+    .advice-plan { display: grid; gap: 8px; }
+    @media (min-width: 800px) { .advice-plan { grid-template-columns: 1fr 1fr; } }
+    .advice-week { border-radius: 16px; padding: 12px 14px; box-shadow: none; }
+    .advice-week b { display: block; margin-bottom: 4px; color: var(--accent-3); }
+    .advice-test { border-radius: 16px; padding: 12px 14px; margin: 0 0 8px; box-shadow: none; }
+    .caution { color: var(--warn); font-size: 0.9rem; margin: 4px 0 0; }
+    .login {
+      max-width: 440px;
+      margin: 14vh auto 0;
+      border-radius: 24px;
+      padding: 32px 28px;
+    }
+    .login h1 { margin-bottom: 8px; }
+    .login input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      margin: 0 0 14px;
+      font: inherit;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(0,0,0,0.25);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .login input[type="password"]:focus { border-color: var(--accent-3); box-shadow: 0 0 0 3px rgba(62,224,197,0.2); }
+    .login .error { display: none; margin: 8px 0 0; color: var(--warn); }
+    .login .error.show { display: block; }
+    a { color: var(--accent); }
+    .error { color: var(--warn); padding: 20px; }
+
+    .section-error {
+      border: 1px solid #ff6b6b;
+      background: rgba(220, 50, 50, 0.18);
+      color: #ffd6d6;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin: 0 0 16px;
+    }
+    .section-error strong { display: block; color: #ffb4b4; margin-bottom: 6px; font-size: 1rem; }
+    .section-error p { margin: 0 0 4px; }
+    .section-error .updated { margin: 6px 0 0; color: #ffd6d6; }
+    .live-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; font-weight: 600;
+      padding: 3px 10px; border-radius: 999px;
+      margin: 0 8px 8px 0; vertical-align: middle;
+    }
+    .live-badge.live { background: #3ee0c5; color: #073b2e; }
+    .live-badge.snap { background: rgba(255,255,255,0.12); color: var(--text); font-weight: 500; }
+    .live-badge.mixed { background: #f5b942; color: #2a1d00; }
+    .pattern-grid { display: grid; gap: 12px; margin: 12px 0 16px; }
+    @media (min-width: 800px) { .pattern-grid { grid-template-columns: 1fr 1fr; } }
+    .pattern-card {
+      border-radius: 16px; padding: 14px 16px;
+      background: var(--glass); border: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+    .pattern-card h3 { margin: 0 0 4px; font-size: 1rem; }
+    .pattern-card .for { color: var(--muted); font-size: 0.86rem; margin-bottom: 8px; }
+    .pattern-card .do-not { color: var(--warn); margin: 8px 0 0; font-size: 0.92rem; }
+    .h-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 10px; }
+    .h-row h2 { margin: 0; }
+    footer { font-size: 0.85rem; margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <main id="app">
+    <p class="muted">กำลังโหลดหน้าเข้าสู่ระบบ…</p>
+  </main>
+  <script>
+    const SOURCE_ORDER = ["studio", "advice", "tubealfred", "ads"];
+    const STALE_MS = 36 * 60 * 60 * 1000;
+    const YT_SCOPES = "https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/yt-analytics.readonly";
+    let snapshotData = null;
+    let accessToken = null;
+    let tokenExpiresAt = 0;
+    let tokenClient = null;
+    let liveMeta = { status: "idle", error: null, fetchedAt: null, studioError: null, competitorError: null, analyticsOk: {}, mineNote: "" };
+    const RENDERERS = {
+      studio: renderStudio,
+      tubealfred: renderTubeAlfred,
+      ads: renderAds,
+      advice: renderAdvice,
+    };
+    const charts = [];
+
+    const fmt = (n, d = 0) => {
+      if (n === null || n === undefined || n === "") return "—";
+      const x = Number(n);
+      if (!Number.isFinite(x)) return "—";
+      return x.toLocaleString("th-TH", { maximumFractionDigits: d, minimumFractionDigits: d });
+    };
+    const fmtHours = (n) => fmt(n, Math.abs(Number(n)) < 1 ? 3 : 1);
+    const fmtPct = (n) => (n === null || n === undefined ? "—" : `${fmt(n, 2)}%`);
+    const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
+
+    function formatUpdated(iso) {
+      if (!iso) return "";
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return String(iso);
+      const parts = new Intl.DateTimeFormat("th-TH", {
+        timeZone: "Asia/Bangkok",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).format(d);
+      return parts + " เวลาไทย (Asia/Bangkok)";
+    }
+
+    function isStale(iso, ms) {
+      if (!iso) return true;
+      const t = new Date(iso).getTime();
+      if (Number.isNaN(t)) return true;
+      return (Date.now() - t) > (ms == null ? STALE_MS : ms);
+    }
+
+    function sectionError(reason, updatedAt) {
+      const box = el("div", { class: "section-error", role: "alert" });
+      box.append(el("strong", { text: "ข้อมูลส่วนนี้ใช้ไม่ได้ชั่วคราว" }));
+      box.append(el("p", { text: reason || "โหลดข้อมูลส่วนนี้ไม่สำเร็จ" }));
+      if (updatedAt) box.append(el("p", { class: "updated", text: "อัปเดตล่าสุด " + formatUpdated(updatedAt) }));
+      else box.append(el("p", { class: "updated", text: "ยังไม่ทราบเวลาอัปเดตของส่วนนี้" }));
+      return box;
+    }
+
+    function liveBadge(kind, text) {
+      return el("span", { class: "live-badge " + (kind || "snap"), text: text });
+    }
+
+    function googleClientId() {
+      const cfg = window.DASHBOARD_CONFIG || {};
+      return String(cfg.GOOGLE_CLIENT_ID || "").trim();
+    }
+
+    function periodTotals(ch) {
+      if (ch && ch.live && ch.live.analytics_ok && ch.live.last_28d) return ch.live.last_28d;
+      return (ch && ch.totals) || {};
+    }
+
+    function lifetimeTotals(ch) {
+      if (ch && ch.live && ch.live.lifetime) return ch.live.lifetime;
+      return (ch && ch.totals_lifetime) || null;
+    }
+    const el = (tag, attrs = {}, kids = []) => {
+      const node = document.createElement(tag);
+      for (const [k, v] of Object.entries(attrs)) {
+        if (k === "html") node.innerHTML = v;
+        else if (k === "text") node.textContent = v;
+        else if (k === "class") node.className = v;
+        else if (k.startsWith("on") && typeof v === "function") node.addEventListener(k.slice(2), v);
+        else if (v !== false && v != null) node.setAttribute(k, v === true ? "" : v);
+      }
+      for (const kid of [].concat(kids)) {
+        if (kid == null || kid === false) continue;
+        node.append(kid.nodeType ? kid : document.createTextNode(kid));
+      }
+      return node;
+    };
+
+    function chartColors() {
+      const s = getComputedStyle(document.documentElement);
+      return {
+        text: s.getPropertyValue("--text").trim(),
+        muted: s.getPropertyValue("--muted").trim(),
+        line: s.getPropertyValue("--line").trim(),
+        c0: s.getPropertyValue("--accent").trim(),
+        c1: s.getPropertyValue("--accent-2").trim(),
+        c2: s.getPropertyValue("--accent-3").trim(),
+      };
+    }
+
+    const CHANNEL_COLOR = {
+      "lion-lykan": "#f5b942",
+      "ai-arai-kan-nee": "#3ee0c5",
+      "raisarapai": "#c084fc",
+      "english-with-meow": "#fb7185",
+    };
+    const CHANNEL_COLOR_BY_NAME = {
+      "พี่ไลอ้อน กับ น้องไลแค่น": "#f5b942",
+      "AI อะไรกันเนี่ย": "#3ee0c5",
+      "ไร้สาระ ไปวันๆ": "#c084fc",
+      "English with แมว": "#fb7185",
+    };
+
+    function makeBarChart(canvas, labels, values, color) {
+      if (!canvas) return null;
+      if (typeof Chart !== "undefined") {
+        const prev = Chart.getChart(canvas);
+        if (prev) prev.destroy();
+      }
+      const c = chartColors();
+      const bg = Array.isArray(color)
+        ? color
+        : (color
+            ? color
+            : labels.map((lb) => CHANNEL_COLOR_BY_NAME[lb] || CHANNEL_COLOR[lb] || c.c0));
+      if (typeof Chart !== "undefined") {
+        Chart.defaults.font.family = '"Prompt", "Noto Sans Thai", sans-serif';
+        Chart.defaults.color = c.muted;
+      }
+      const chart = new Chart(canvas, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: bg,
+            borderWidth: 0,
+            borderRadius: 12,
+            borderSkipped: false,
+            maxBarThickness: 28,
+          }],
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => fmt(ctx.raw) } } },
+          scales: {
+            x: { ticks: { color: c.muted, callback: (v) => fmt(v) }, grid: { color: "rgba(255,255,255,0.08)" } },
+            y: { ticks: { color: c.text }, grid: { display: false } },
+          },
+        },
+      });
+      charts.push(chart);
+      return chart;
+    }
+
+    function svgIcon(pathD) {
+      const ns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(ns, "svg");
+      svg.setAttribute("viewBox", "0 0 24 24");
+      svg.setAttribute("aria-hidden", "true");
+      const path = document.createElementNS(ns, "path");
+      path.setAttribute("d", pathD);
+      svg.appendChild(path);
+      return svg;
+    }
+    const ICONS = {
+      views: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z M12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5",
+      users: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8 M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75",
+    };
+    // split paths: svgIcon only takes one path. Use two path elements if needed.
+    function iconNamed(name) {
+      const ns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(ns, "svg");
+      svg.setAttribute("viewBox", "0 0 24 24");
+      svg.setAttribute("aria-hidden", "true");
+      const ds = name === "users"
+        ? ["M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2","M9 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8","M22 21v-2a4 4 0 0 0-3-3.87","M16 3.13a4 4 0 0 1 0 7.75"]
+        : ["M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z","M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6"];
+      for (const d of ds) {
+        const path = document.createElementNS(ns, "path");
+        path.setAttribute("d", d);
+        svg.appendChild(path);
+      }
+      return svg;
+    }
+    function kpiTile(value, label, color, icon, trend, trendKind) {
+      const tile = el("div", { class: "kpi" });
+      tile.style.setProperty("--kpi", color);
+      const top = el("div", { class: "kpi-top" });
+      const ic = el("div", { class: "kpi-icon" });
+      ic.append(iconNamed(icon));
+      top.append(ic);
+      if (trend) {
+        const tr = el("div", { class: "kpi-trend" + (trendKind === "neutral" ? " neutral" : "") });
+        tr.append(document.createTextNode((trendKind === "up" ? "▲ " : "") + trend));
+        top.append(tr);
+      }
+      tile.append(top);
+      tile.append(el("div", { class: "kpi-value", text: value }));
+      tile.append(el("div", { class: "kpi-label", text: label }));
+      return tile;
+    }
+
+    function videoTable(videos, caption) {
+      if (!videos || !videos.length) return null;
+      const wrap = el("div");
+      if (caption) wrap.append(el("h3", { text: caption }));
+      const table = el("table");
+      table.append(el("thead", {}, el("tr", {}, [
+        el("th", { text: "คลิป" }),
+        el("th", { text: "วิวตลอดชีพ" }),
+        el("th", { text: "วิว 28 วัน" }),
+        el("th", { text: "ผู้ติดตาม 28 วัน" }),
+        el("th", { text: "% การดู" }),
+        el("th", { text: "CTR" }),
+        el("th", { text: "วินาที" }),
+      ])));
+      const body = el("tbody");
+      for (const v of videos) {
+        const title = v.url
+          ? el("a", { href: v.url, target: "_blank", rel: "noopener", text: v.title || v.id })
+          : (v.title || v.id);
+        const views28 = v.views_28d != null ? v.views_28d : v.views;
+        body.append(el("tr", {}, [
+          el("td", {}, title),
+          el("td", { text: fmt(v.views_lifetime) }),
+          el("td", { text: fmt(views28) }),
+          el("td", { text: fmt(v.subscribers) }),
+          el("td", { text: fmtPct(v.average_percentage_viewed) }),
+          el("td", { text: fmtPct(v.ctr_percent) }),
+          el("td", { text: v.duration_seconds == null ? "—" : fmt(v.duration_seconds) }),
+        ]));
+      }
+      table.append(body);
+      wrap.append(table);
+      return wrap;
+    }
+
+    function meaningFor(ch) {
+      const t = ch.totals;
+      const w = ch.published_in_window || {};
+      if (ch.key === "ai-arai-kan-nee") {
+        return "คลิปแมวที่ลงในช่วงนี้ 6 คลิป ได้ " + fmt(w.cat.views) +
+          " วิว มัธยฐาน " + fmt(w.cat.median_views) + " และผู้ติดตามจากคลิป " + fmt(w.cat.subscribers_attributed) +
+          " จาก " + fmt(t.subscribers_attributed) + " ทั้งช่อง คลิปข่าว AI ที่ลงช่วงเดียวกัน 22 คลิป ได้วิวมัธยฐานแค่ " +
+          fmt(w.news_shorts.median_views) + " คลิปเก่าเรื่องแกล้งมิจฉาชีพยังดึงได้ 13,504 วิวในช่วงนี้ แต่ได้ผู้ติดตามแค่ 1 คน การแยกแมวกับข่าวดูจากชื่อคลิป (สมมติฐาน)";
+      }
+      if (ch.key === "lion-lykan") {
+        return "คลิปเดียว «ทำไมกินแต่ฝรั่ง?» ได้ 77,872 วิว และผู้ติดตามที่โยงกับคลิปนี้ 182 คน คนดูวนซ้ำจนเปอร์เซ็นต์การดูทั้งช่อง " +
+          fmtPct(t.average_percentage_viewed) + " แถวรวมของ Studio บอกผู้ติดตามจากคลิปทั้งช่อง " +
+          fmt(t.subscribers_attributed) + " คน ซึ่งสูงกว่าผลรวมรายคลิปในตาราง";
+      }
+      if (ch.key === "raisarapai") {
+        return "คลิปแมว 2 คลิปได้วิวหลักพัน ส่วนคลิปยาวเรื่องสงครามโลกได้ 108 วิว ทั้งที่ภาพปกโชว์ 3,694 ครั้ง CTR 1.87% และคนดูจบเฉลี่ย 38.71%";
+      }
+      if (ch.key === "english-with-meow") {
+        const life = lifetimeTotals(ch);
+        const lifeBit = life && life.views != null
+          ? " ตลอดชีพในไฟล์ Studio ได้ " + fmt(life.views) + " วิว และผู้ติดตามจากคลิป " + fmt(life.subscribers_attributed ?? life.subscribers)
+          : "";
+        return "ลง 36 คลิปในช่วง 28 วันนี้ แต่ภาพปกโชว์แค่ 126 ครั้ง ได้ 3 วิว และไม่ได้ผู้ติดตามจากคลิป" + lifeBit + " ปัญหาตอนนี้คือคนยังไม่เจอช่อง ไม่ใช่แค่คนดูไม่จบ";
+      }
+      return "";
+    }
+
+    function renderChannelPanel(ch) {
+      const t = periodTotals(ch);
+      const life = lifetimeTotals(ch);
+      const box = el("div", { id: "channel-panel" });
+      box.append(el("h3", { text: ch.name + " (" + ch.handle + ")" }));
+      const props = el("table");
+      const rows = [
+        ["วิวตลอดชีพ", life ? fmt(life.views) : "—"],
+        ["วิวในช่วง 28 วัน", fmt(t.views)],
+        ["ผู้ติดตามจากคลิปตลอดชีพ", life ? fmt(life.subscribers_attributed ?? life.subscribers) : "—"],
+        ["ผู้ติดตามจากคลิปในช่วง 28 วัน", fmt(t.subscribers_attributed ?? t.subscribers_gained)],
+        ["ชั่วโมงดูในช่วง 28 วัน", fmtHours(t.watch_time_hours)],
+        ["CTR ภาพปกในช่วง 28 วัน", fmtPct(t.ctr_percent)],
+        ["เปอร์เซ็นต์การดูเฉลี่ยในช่วง 28 วัน", fmtPct(t.average_percentage_viewed)],
+        ["จำนวนคลิปในช่วง 28 วัน", fmt(t.video_count) + (t.videos_with_views != null ? " (มีวิว " + fmt(t.videos_with_views) + " คลิป)" : "")],
+      ];
+      for (const [k, v] of rows) {
+        props.append(el("tr", {}, [el("td", { text: k }), el("td", { text: v })]));
+      }
+      box.append(props);
+      const tops = (ch.top_videos || []).filter((v) => (v.views || 0) > 0);
+      if (tops.length) {
+        const card = el("div", { class: "chart-card" });
+        card.append(el("h3", { text: "คลิปที่ได้วิวสูงในช่วง 28 วัน" }));
+        const wrap = el("div", { class: "chart-wrap" });
+        const canvas = el("canvas", { id: "chart-channel-top" });
+        wrap.append(canvas);
+        card.append(wrap);
+        box.append(card);
+        queueMicrotask(() => {
+          makeBarChart(
+            canvas,
+            tops.map((v) => (v.title || "").slice(0, 28)),
+            tops.map((v) => v.views),
+          );
+        });
+        box.append(videoTable(tops, "คลิปเด่นในช่วง 28 วัน"));
+      }
+      const lifeTops = (ch.top_videos_lifetime || []).filter((v) => (v.views_lifetime || 0) > 0);
+      if (lifeTops.length) {
+        box.append(videoTable(lifeTops, "คลิปเด่นตลอดชีพ"));
+      }
+      const bottoms = (ch.bottom_videos || []).filter((v) => !tops.some((t0) => t0.id === v.id));
+      if (bottoms.length && ch.totals.videos_with_views > 3) {
+        box.append(videoTable(bottoms, "คลิปที่ได้วิวต่ำกว่าในกลุ่มที่มีวิว"));
+      }
+      if (t.videos_zero_views) {
+        box.append(el("p", { class: "caveat", text: "คลิปที่ได้ 0 วิวในช่วงนี้ " + fmt(t.videos_zero_views) + " คลิป" }));
+      }
+      box.append(el("p", { class: "meaning", text: meaningFor(ch) }));
+      return box;
+    }
+
+    function renderStudio(src, data) {
+      const section = el("section", { class: "source", id: "studio", "data-source": "studio" });
+      const head = el("div", { class: "h-row" });
+      head.append(el("h2", { text: "YouTube Studio — สรุปช่อง" }));
+      const liveCount = (src.channels || []).filter((c) => c.live && c.live.analytics_ok).length;
+      const dataCount = (src.channels || []).filter((c) => c.live && c.live.data_api_ok).length;
+      if (liveMeta.status === "ok" && liveCount) head.append(liveBadge("live", "ข้อมูลสด " + liveCount + " ช่อง"));
+      else if (liveMeta.status === "ok" && dataCount) head.append(liveBadge("mixed", "สดบางส่วน · 28 วันใช้สำเนา"));
+      else head.append(liveBadge("snap", "สำเนารายวัน"));
+      section.append(head);
+      const periodLabel = (src.period && src.period.label_th) || (data && data.period && data.period.label_th) || "";
+      const lag = (src.period && src.period.lag_note) || (data && data.period && data.period.lag_note) || "";
+      section.append(el("p", { text: "ช่วง " + periodLabel + " เวลาไทย (Asia/Bangkok) ตารางโชว์ทั้งยอดตลอดชีพและยอด 28 วัน" }));
+      if (lag) section.append(el("p", { class: "caveat", text: lag }));
+      if (liveMeta.studioError) {
+        section.append(sectionError(liveMeta.studioError, liveMeta.fetchedAt || (data && data.generated_at)));
+      }
+      if (liveMeta.mineNote) section.append(el("p", { class: "caveat", text: liveMeta.mineNote }));
+
+      const channels = src.channels || [];
+      const byViews = [...channels].sort((a, b) => (periodTotals(b).views || 0) - (periodTotals(a).views || 0));
+      const metrics = el("div", { class: "metrics" });
+      const lion = channels.find((c) => c.key === "lion-lykan");
+      const ai = channels.find((c) => c.key === "ai-arai-kan-nee");
+      const lionT = periodTotals(lion || {});
+      const aiT = periodTotals(ai || {});
+      metrics.append(
+        kpiTile(fmt(lionT.views), "วิว พี่ไลอ้อน · 28 วัน", CHANNEL_COLOR["lion-lykan"], "views", "สูงสุดใน 4 ช่อง", "up"),
+        kpiTile(fmt(lionT.subscribers_attributed ?? lionT.subscribers_gained), "ผู้ติดตามจากคลิป พี่ไลอ้อน", CHANNEL_COLOR["lion-lykan"], "users", "สูงสุดใน 4 ช่อง", "up"),
+        kpiTile(fmt(aiT.views), "วิว AI อะไรกันเนี่ย · 28 วัน", CHANNEL_COLOR["ai-arai-kan-nee"], "views", "อันดับ 2 ใน 4 ช่อง", "neutral"),
+        kpiTile(fmt(aiT.subscribers_attributed ?? aiT.subscribers_gained), "ผู้ติดตามจากคลิป AI อะไรกันเนี่ย", CHANNEL_COLOR["ai-arai-kan-nee"], "users", "อันดับ 2 ใน 4 ช่อง", "neutral"),
+      );
+      section.append(metrics);
+
+      const chartsBox = el("div", { class: "charts" });
+      const card1 = el("div", { class: "chart-card" }, [el("h3", { text: "วิวในช่วง 28 วัน" }), el("div", { class: "chart-wrap" }, el("canvas", { id: "chart-views" }))]);
+      const card2 = el("div", { class: "chart-card" }, [el("h3", { text: "ผู้ติดตามจากคลิป" }), el("div", { class: "chart-wrap" }, el("canvas", { id: "chart-subs" }))]);
+      chartsBox.append(card1, card2);
+      section.append(chartsBox);
+      queueMicrotask(() => {
+        makeBarChart(document.getElementById("chart-views"), byViews.map((c) => c.name), byViews.map((c) => periodTotals(c).views || 0));
+        makeBarChart(document.getElementById("chart-subs"), byViews.map((c) => c.name), byViews.map((c) => periodTotals(c).subscribers_attributed ?? periodTotals(c).subscribers_gained ?? 0), chartColors().c1);
+      });
+
+      const table = el("table");
+      table.append(el("thead", {}, el("tr", {}, ["ช่อง", "วิวตลอดชีพ", "วิว 28 วัน", "ผู้ติดตามตลอดชีพ", "ผู้ติดตาม 28 วัน", "ชม.ดู 28 วัน", "CTR 28 วัน"].map((h) => el("th", { text: h })))));
+      const tb = el("tbody");
+      for (const c of byViews) {
+        const pt = periodTotals(c);
+        const lt = lifetimeTotals(c) || {};
+        tb.append(el("tr", {}, [
+          el("td", { text: c.name }),
+          el("td", { text: fmt(lt.views) }),
+          el("td", { text: fmt(pt.views) }),
+          el("td", { text: fmt(lt.subscribers_attributed ?? lt.subscribers) }),
+          el("td", { text: fmt(pt.subscribers_attributed ?? pt.subscribers_gained) }),
+          el("td", { text: fmtHours(pt.watch_time_hours) }),
+          el("td", { text: fmtPct(pt.ctr_percent) }),
+        ]));
+      }
+      table.append(tb);
+      section.append(table);
+      section.append(el("p", { class: "caveat", text: "ผู้ติดตามในคอลัมน์ 28 วันและตลอดชีพของ Studio คือผู้ติดตามที่โยงกับคลิป ไม่ใช่ยอดรวมหน้าช่อง หลังเชื่อม Google ยอดผู้ติดตามตลอดชีพจะเป็นยอดรวมหน้าช่องจาก Data API ซึ่งคนละตัวเลข ยอดวิว Shorts สูงกว่ายอดแสดงผลภาพปกได้ เพราะคนส่วนใหญ่มาจากฟีด Shorts" }));
+
+      if (ai) {
+        const w = ai.published_in_window;
+        const split = el("div", { class: "chart-card" });
+        split.append(el("h3", { text: "ช่อง AI อะไรกันเนี่ย — คลิปที่ลงในช่วงนี้" }));
+        split.append(el("div", { class: "chart-wrap" }, el("canvas", { id: "chart-split" })));
+        section.append(split);
+        queueMicrotask(() => {
+          makeBarChart(
+            document.getElementById("chart-split"),
+            ["คลิปแมว (" + w.cat.n + " คลิป)", "คลิปข่าว AI (" + w.news_shorts.n + " คลิป)"],
+            [w.cat.views, w.news_shorts.views],
+            [chartColors().c0, chartColors().c2],
+          );
+        });
+      }
+
+      const detail = el("div", { id: "channel-detail" });
+      detail.append(el("h2", { text: "รายช่อง" }));
+      const tabs = el("div", { class: "tabs", role: "tablist" });
+      const panelHost = el("div");
+      const keys = channels.map((c) => c.key);
+      const defaultKey = "ai-arai-kan-nee";
+      function show(key) {
+        for (const btn of tabs.querySelectorAll("button")) {
+          btn.setAttribute("aria-pressed", btn.dataset.key === key ? "true" : "false");
+        }
+        panelHost.replaceChildren(renderChannelPanel(channels.find((c) => c.key === key)));
+      }
+      for (const c of channels) {
+        const btn = el("button", {
+          type: "button",
+          "data-key": c.key,
+          "aria-pressed": c.key === defaultKey ? "true" : "false",
+          text: c.name,
+          onclick: () => show(c.key),
+        });
+        btn.style.setProperty("--tab", CHANNEL_COLOR[c.key] || "#8ea8ff");
+        tabs.append(btn);
+      }
+      detail.append(tabs, panelHost);
+      section.append(detail);
+      queueMicrotask(() => show(defaultKey));
+
+      const take = el("p");
+      take.innerHTML = "";
+      section.append(el("p", { text: "สรุปสั้นๆ: คลิปแมวพาทั้งวิวและผู้ติดตาม ข่าว AI ที่ลงช่วงนี้มัธยฐานแค่ 46 วิว ยกเว้นคลิปเก่าเรื่องแกล้งมิจฉาชีพที่ได้ 13,504 วิวต่อในช่วงนี้ แต่ได้ผู้ติดตามแค่ 1 คน" }));
+      if (src.note) section.append(el("p", { class: "caveat", text: src.note }));
+      return section;
+    }
+
+    function renderTubeAlfred(src, data) {
+      const section = el("section", { class: "source", id: "tubealfred", "data-source": "tubealfred" });
+      const head = el("div", { class: "h-row" });
+      head.append(el("h2", { text: "คู่แข่งสาธารณะ" }));
+      if (liveMeta.status === "ok" && !liveMeta.competitorError) head.append(liveBadge("live", "ยอดสาธารณะสด"));
+      else head.append(liveBadge("snap", "สำเนา TubeAlfred"));
+      section.append(head);
+      section.append(el("p", { text: src.criterion || "เลือกช่องไทยที่คลิปล่าสุดมียอดสูงกว่าคลิปเด่นของเรา ไม่ใช้คู่แข่งที่เล็กกว่า" }));
+      if (src.method) section.append(el("p", { class: "caveat", text: src.method + (src.pulled_at ? " ดึง " + formatUpdated(src.pulled_at) : "") }));
+      if (liveMeta.competitorError) {
+        section.append(sectionError(liveMeta.competitorError, liveMeta.fetchedAt || src.pulled_at));
+      }
+
+      const peers = src.peers || [];
+      const outliers = src.outliers || [];
+      if (!peers.length && !outliers.length && !((src.patterns || []).length)) {
+        section.append(sectionError("ยังไม่มีข้อมูลคู่แข่งในไฟล์นี้", src.pulled_at || (data && data.generated_at)));
+        return section;
+      }
+      if (peers.length) {
+        const table = el("table");
+        table.append(el("thead", {}, el("tr", {}, ["ช่อง", "นิช", "คลิปเด่นที่พบ", "วิวคลิปเด่น"].map((h) => el("th", { text: h })))));
+        const tb = el("tbody");
+        for (const p of peers) {
+          const mine = outliers.filter((v) => (v.channel_id && p.id && v.channel_id === p.id) || v.channel === p.name);
+          const best = mine.slice().sort((a, b) => (b.views_live || b.views) - (a.views_live || a.views))[0];
+          const views = best ? (best.views_live != null ? best.views_live : best.views) : null;
+          const name = p.url ? el("a", { href: p.url, target: "_blank", rel: "noopener", text: p.name }) : (p.name || "");
+          tb.append(el("tr", {}, [
+            el("td", {}, name),
+            el("td", { text: p.kind || p.niche || "" }),
+            el("td", { text: best ? (best.title || "") : "—" }),
+            el("td", { text: fmt(views) }),
+          ]));
+        }
+        table.append(tb);
+        section.append(table);
+      }
+      if (outliers.length) {
+        section.append(el("h3", { text: "คลิปที่มียอดสูง (ตัวอย่างที่พบ)" }));
+        const table = el("table");
+        table.append(el("thead", {}, el("tr", {}, ["คลิป", "ช่อง", "วิวสาธารณะ", "ความยาว", "เมื่อไหร่"].map((h) => el("th", { text: h })))));
+        const tb = el("tbody");
+        for (const v of outliers) {
+          const title = v.url ? el("a", { href: v.url, target: "_blank", rel: "noopener", text: v.title }) : v.title;
+          const views = v.views_live != null ? v.views_live : v.views;
+          tb.append(el("tr", {}, [
+            el("td", {}, title),
+            el("td", { text: v.channel || "" }),
+            el("td", { text: fmt(views) }),
+            el("td", { text: v.length_text || (v.length_seconds != null ? fmt(v.length_seconds) + " วิ" : "—") }),
+            el("td", { text: v.published_time_text || "—" }),
+          ]));
+        }
+        table.append(tb);
+        section.append(table);
+      }
+      const patterns = src.patterns || [];
+      if (patterns.length) {
+        section.append(el("h3", { text: "สิ่งที่เรียนได้ (ห้ามคัดลอก)" }));
+        const grid = el("div", { class: "pattern-grid" });
+        for (const pat of patterns) {
+          const card = el("article", { class: "pattern-card" });
+          card.append(el("h3", { text: pat.peer || "" }));
+          card.append(el("div", { class: "for", text: (pat.niche || "") + (pat.for_channels ? " · ใช้กับ " + pat.for_channels : "") }));
+          card.append(el("p", { text: pat.learn || "" }));
+          if (pat.do_not) card.append(el("p", { class: "do-not", text: pat.do_not }));
+          grid.append(card);
+        }
+        section.append(grid);
+      }
+      for (const line of src.excluded || []) section.append(el("p", { class: "caveat", text: line }));
+      for (const c of src.caveats || []) section.append(el("p", { class: "caveat", text: c }));
+      if (src.note) section.append(el("p", { class: "caveat", text: src.note }));
+      return section;
+    }
+
+    function renderAdvice(src, data) {
+      const section = el("section", { class: "source", id: "advice", "data-source": "advice" });
+      const head = el("div", { class: "h-row" });
+      head.append(el("h2", { text: (src && src.label) || "AI แนะนำ & แผนพัฒนาช่อง" }));
+      head.append(liveBadge("snap", "แผนจากบอท ไม่คำนวณใหม่จากข้อมูลสด"));
+      section.append(head);
+      const generated = data && data.generated_at;
+      const channels = (src && src.channels) || [];
+      const missing = !src || !channels.length;
+      if (missing) {
+        section.append(sectionError("ยังไม่มีแผนจากบอทในไฟล์นี้ หรือโหลดแผนไม่สำเร็จ ส่วนอื่นยังใช้ได้ตามปกติ", generated));
+        return section;
+      }
+      if (isStale(generated)) {
+        section.append(sectionError("แผนนี้สร้างไว้เกิน 36 ชั่วโมงแล้ว ยังเป็นแผนชุดเก่าอยู่ ส่วนอื่นยังใช้ได้ตามปกติ", generated));
+      }
+      if (src && src.disclaimer) section.append(el("p", { text: src.disclaimer }));
+      if (src && src.method) section.append(el("p", { class: "caveat", text: src.method }));
+      if (generated) section.append(el("p", { class: "caveat", text: "สร้างแผนเมื่อ " + formatUpdated(generated) }));
+      const grid = el("div", { class: "advice-grid" });
+      for (const ch of src.channels || []) {
+        const card = el("article", { class: "advice-card" });
+        const h = el("h3");
+        h.append(ch.name || "");
+        if (ch.handle) h.append(el("span", { class: "advice-handle", text: "  " + ch.handle }));
+        card.append(h);
+
+        const dx = el("div", { class: "advice-block" });
+        dx.append(el("h4", { text: "วินิจฉัยจากตัวเลขจริง" }));
+        const ul = el("ul", { class: "advice-list" });
+        for (const line of ch.diagnosis || []) ul.append(el("li", { text: line }));
+        dx.append(ul);
+        card.append(dx);
+
+        const act = el("div", { class: "advice-block" });
+        act.append(el("h4", { text: "3 อย่างที่ทำสัปดาห์นี้" }));
+        const acts = el("div", { class: "advice-actions" });
+        for (const a of ch.actions_this_week || []) {
+          const box = el("div", { class: "advice-action" });
+          box.append(el("strong", { text: a.title || "" }));
+          if (a.detail) box.append(el("div", { text: a.detail }));
+          if (a.evidence) box.append(el("div", { class: "ev", text: a.evidence }));
+          acts.append(box);
+        }
+        act.append(acts);
+        card.append(act);
+
+        const plan = el("div", { class: "advice-block" });
+        plan.append(el("h4", { text: "แผน 30 วัน" }));
+        const weeks = el("div", { class: "advice-plan" });
+        for (const w of ch.plan_30d || []) {
+          const box = el("div", { class: "advice-week" });
+          box.append(el("b", { text: w.week || "" }));
+          box.append(el("div", { text: w.text || "" }));
+          weeks.append(box);
+        }
+        plan.append(weeks);
+        card.append(plan);
+
+        const tests = el("div", { class: "advice-block" });
+        tests.append(el("h4", { text: "3 การทดสอบทีละตัวแปร" }));
+        for (const te of ch.tests || []) {
+          const box = el("div", { class: "advice-test" });
+          box.append(el("strong", { text: (te.title || "") }));
+          if (te.hypothesis) box.append(el("div", { text: te.hypothesis }));
+          box.append(el("div", { text: [te.metric && ("วัด: " + te.metric), te.target && ("เป้า: " + te.target)].filter(Boolean).join("  ") }));
+          if (te.assumption) box.append(el("div", { text: te.assumption }));
+          if (te.competing) box.append(el("div", { class: "ev", text: "คำอธิบายอื่น: " + te.competing }));
+          if (te.status) box.append(el("div", { class: "muted", text: te.status }));
+          tests.append(box);
+        }
+        card.append(tests);
+
+        for (const c of ch.cautions || []) card.append(el("p", { class: "caution", text: c }));
+        grid.append(card);
+      }
+      section.append(grid);
+      if (src && src.note) section.append(el("p", { class: "caveat", text: src.note }));
+      return section;
+    }
+
+    function renderAds(src) {
+      const section = el("section", { class: "source", id: "ads", "data-source": "ads" });
+      section.append(el("h2", { text: (src && src.label) || "โฆษณา (Facebook/Google/YouTube Ads)" }));
+      const box = el("div", { class: "placeholder" });
+      box.append(el("p", { text: "ยังไม่มีข้อมูลจากโฆษณา จะเติมเมื่อเชื่อม Facebook หรือ Google หรือ YouTube Ads" }));
+      if (src && src.note) box.append(el("p", { text: src.note }));
+      section.append(box);
+      return section;
+    }
+
+    function renderUnknown(key, src) {
+      const section = el("section", { class: "source", id: key, "data-source": key });
+      section.append(el("h2", { text: (src && src.label) || key }));
+      if (src && src.note) section.append(el("p", { class: "caveat", text: src.note }));
+      const pre = el("pre");
+      pre.textContent = JSON.stringify(src, null, 2);
+      section.append(pre);
+      return section;
+    }
+
+    function renderTests(data) {
+      const tests = data.tests || [];
+      if (!tests.length) return null;
+      const section = el("section", { class: "block", id: "tests" });
+      section.append(el("h2", { text: "3 การทดสอบถัดไป" }));
+      section.append(el("p", { text: data.tests_note || "ยังไม่เริ่ม ต้องได้ OK ก่อนลงคลิปทดสอบ ไม่การันตีว่าจะโต" }));
+      const ol = el("ol", { class: "tests" });
+      for (const t of tests) {
+        const li = el("li");
+        li.append(el("strong", { text: t.title }));
+        li.append(el("div", { text: t.hypothesis }));
+        li.append(el("div", { text: "วัด: " + t.metric + " เป้า: " + t.target }));
+        if (t.stretch) li.append(el("div", { text: "เป้าเผื่อ: " + t.stretch }));
+        li.append(el("div", { text: t.assumption }));
+        li.append(el("div", { text: "คำอธิบายอื่น: " + t.competing }));
+        li.append(el("div", { class: "muted", text: "สถานะ ณ 20 พ.ย. 2026 เวลาไทย: " + t.status }));
+        ol.append(li);
+      }
+      section.append(ol);
+      return section;
+    }
+
+    function renderSourcesIndex(data) {
+      const section = el("section", { class: "block", id: "sources" });
+      section.append(el("h2", { text: "แหล่งข้อมูล" }));
+      section.append(el("p", { text: "แต่ละกล่องด้านบนมาจากอะแดปเตอร์หนึ่งตัวใน data.json ถ้ามีเครื่องมือใหม่ ให้เพิ่มอะแดปเตอร์ใน build_data.py แล้วใส่ผลใน sources แดชบอร์ดนี้จะวาดกล่องใหม่ให้" }));
+      const table = el("table");
+      table.append(el("thead", {}, el("tr", {}, ["แหล่ง", "สถานะ", "หมายเหตุ"].map((h) => el("th", { text: h })))));
+      const tb = el("tbody");
+      for (const [key, src] of Object.entries(data.sources || {})) {
+        tb.append(el("tr", {}, [
+          el("td", { text: (src.label || key) }),
+          el("td", { text: src.status || "มีข้อมูล" }),
+          el("td", { text: src.note || "" }),
+        ]));
+      }
+      table.append(tb);
+      section.append(table);
+      if (data.add_new_tool_here) section.append(el("p", { class: "caveat", text: "เพิ่มเครื่องมือใหม่ตรงนี้: " + data.add_new_tool_here }));
+      section.append(el("p", { class: "caveat", text: "สำเนารายวันสร้างด้วย python3 build_data.py แผนในส่วน AI แนะนำมาจากบอทชุดล่าสุดในไฟล์ ไม่คำนวณใหม่จากข้อมูลสด" }));
+      section.append(el("p", { class: "caveat", text: "โหมดสดดึง YouTube Data API และ YouTube Analytics API ในเบราว์เซอร์หลังเข้าสู่ระบบ Google ไม่ผ่านบอท" }));
+      return section;
+    }
+
+    function refreshUrl() {
+      const cfg = window.DASHBOARD_CONFIG || {};
+      return (cfg.REFRESH_WEBHOOK_URL || window.REFRESH_WEBHOOK_URL || "").trim();
+    }
+
+    async function triggerRefresh(btn, statusEl) {
+      const url = refreshUrl();
+      if (!url) return;
+      btn.disabled = true;
+      statusEl.className = "refresh-status";
+      statusEl.textContent = "กำลังขอข้อมูลใหม่…";
+      try {
+        const res = await fetch(url, { method: "POST", mode: "cors" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        statusEl.textContent = "ขอข้อมูลแล้ว รอสักครู่แล้วรีเฟรชหน้านี้";
+      } catch (err) {
+        statusEl.className = "refresh-status err";
+        statusEl.textContent = "ขอข้อมูลไม่สำเร็จ ลองใหม่ภายหลัง";
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function renderToolbar(data) {
+      const bar = el("div", { class: "toolbar" });
+      const snap = formatUpdated(data.generated_at);
+      bar.append(el("div", { class: "updated", text: snap ? "สำเนารายวัน อัปเดต " + snap : "ยังไม่ทราบเวลาอัปเดตของสำเนารายวัน" }));
+      if (liveMeta.fetchedAt) {
+        bar.append(el("div", { class: "updated", text: "ข้อมูลสด อัปเดต " + formatUpdated(liveMeta.fetchedAt) }));
+      }
+      const statusEl = el("span", { class: "refresh-status", id: "live-status" });
+      if (liveMeta.status === "connecting") statusEl.textContent = "กำลังดึงข้อมูลสดจาก YouTube…";
+      if (googleClientId()) {
+        if (liveMeta.status === "ok" && accessToken) {
+          const refreshBtn = el("button", {
+            type: "button",
+            class: "refresh-btn",
+            text: "รีเฟรชข้อมูลสด",
+            onclick: () => startLive(""),
+          });
+          const outBtn = el("button", {
+            type: "button",
+            class: "refresh-btn",
+            text: "ออกจาก YouTube",
+            onclick: () => signOutYoutube(),
+          });
+          bar.append(refreshBtn, outBtn, statusEl);
+        } else {
+          const btn = el("button", {
+            type: "button",
+            class: "refresh-btn",
+            text: "เชื่อมต่อ YouTube (ข้อมูลสด)",
+            onclick: () => startLive("consent"),
+          });
+          bar.append(btn, statusEl);
+        }
+      } else {
+        bar.append(el("span", { class: "refresh-status", text: "โหมดสดยังไม่พร้อม เพราะยังไม่มี GOOGLE_CLIENT_ID ใน config.js" }));
+      }
+      const hook = refreshUrl();
+      if (hook) {
+        const hookStatus = el("span", { class: "refresh-status" });
+        const hookBtn = el("button", {
+          type: "button",
+          class: "refresh-btn",
+          text: "ดึงข้อมูลตอนนี้",
+          onclick: () => triggerRefresh(hookBtn, hookStatus),
+        });
+        bar.append(hookBtn, hookStatus);
+      }
+      return bar;
+    }
+
+    function renderSignInNote() {
+      const box = el("p", { class: "lead" });
+      box.append(document.createTextNode("ถ้าจะดูยอดปัจจุบัน ให้เข้าสู่ระบบ Google ด้วย "));
+      box.append(el("strong", { text: "sitthinon.ma@gmail.com" }));
+      box.append(document.createTextNode(" เพราะบัญชีนี้ถือทั้ง 4 ช่อง ครั้งแรก Google จะเตือนว่าแอปยังไม่ผ่านการยืนยัน (โหมดทดสอบ) ให้กด Advanced แล้วกด Continue"));
+      return box;
+    }
+
+    function renderPage(data) {
+      const app = document.getElementById("app");
+      app.replaceChildren();
+      app.append(el("h1", { text: "แดชบอร์ดช่อง YouTube" }));
+      const period = (data.period && data.period.label_th) || "";
+      app.append(el("p", { class: "lead", text: "ตัวเลขจาก YouTube Studio ช่วง " + period + " ของ 4 ช่อง ตารางโชว์ทั้งยอดตลอดชีพและยอด 28 วัน คลิปแมวพาวิวและผู้ติดตามเกือบทั้งหมด ส่วนข่าว AI แห้งยังน้อย" }));
+      if (data.period && data.period.lag_note) app.append(el("p", { class: "caveat", text: data.period.lag_note }));
+      app.append(renderSignInNote());
+      app.append(renderToolbar(data));
+      const toc = el("nav", { class: "toc", "aria-label": "สารบัญ" });
+      const links = [
+        ["#studio", "สรุปช่อง"],
+        ["#channel-detail", "รายช่อง"],
+        ["#advice", "AI แนะนำ & แผนพัฒนาช่อง"],
+        ["#tubealfred", "คู่แข่งสาธารณะ"],
+        ["#ads", "โฆษณา"],
+        ["#tests", "3 การทดสอบถัดไป"],
+        ["#sources", "แหล่งข้อมูล"],
+      ];
+      for (const [href, label] of links) toc.append(el("a", { href, text: label }));
+      app.append(toc);
+
+      const sources = data.sources || {};
+      const keys = [
+        ...SOURCE_ORDER.filter((k) => k in sources || k === "ads"),
+        ...Object.keys(sources).filter((k) => !SOURCE_ORDER.includes(k)),
+      ];
+      for (const key of keys) {
+        const src = sources[key] || { adapter: key, label: key, status: "empty" };
+        const fn = RENDERERS[key] || ((s) => renderUnknown(key, s));
+        try {
+          app.append(fn(src, data));
+        } catch (err) {
+          const section = el("section", { class: "source", id: key });
+          section.append(el("h2", { text: (src && src.label) || key }));
+          section.append(sectionError("วาดส่วนนี้ไม่สำเร็จ ส่วนอื่นยังใช้ได้ตามปกติ", data && data.generated_at));
+          app.append(section);
+        }
+      }
+      try {
+        const tests = renderTests(data);
+        if (tests) app.append(tests);
+      } catch (err) {
+        const section = el("section", { class: "block", id: "tests" });
+        section.append(el("h2", { text: "3 การทดสอบถัดไป" }));
+        section.append(sectionError("โหลดส่วนการทดสอบไม่สำเร็จ ส่วนอื่นยังใช้ได้ตามปกติ", data && data.generated_at));
+        app.append(section);
+      }
+      try {
+        app.append(renderSourcesIndex(data));
+      } catch (err) {
+        const section = el("section", { class: "block", id: "sources" });
+        section.append(el("h2", { text: "แหล่งข้อมูล" }));
+        section.append(sectionError("โหลดส่วนแหล่งข้อมูลไม่สำเร็จ ส่วนอื่นยังใช้ได้ตามปกติ", data && data.generated_at));
+        app.append(section);
+      }
+      app.append(el("footer", { text: "ไซต์นี้โฮสต์บน GitHub Pages แบบสาธารณะได้ เพราะสำเนารายวันถูกเข้ารหัส ถอดรหัสในเบราว์เซอร์หลังกรอกรหัสผ่าน อย่าอัปโหลด data.json หรือ data.js โหมดสดใช้ GOOGLE_CLIENT_ID ใน config.js (ไม่ใส่รหัสลับในคลัง) เปิดท้องถิ่นด้วย python3 -m http.server 8000 แล้วเข้า http://localhost:8000" }));
+    }
+
+    function b64ToBytes(s) {
+      const bin = atob(s);
+      const out = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    }
+
+    async function decryptData(payload, password) {
+      const salt = b64ToBytes(payload.salt);
+      const iv = b64ToBytes(payload.iv);
+      const data = b64ToBytes(payload.data);
+      const material = await crypto.subtle.importKey(
+        "raw",
+        new TextEncoder().encode(password),
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+      );
+      const key = await crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt,
+          iterations: payload.iter,
+          hash: payload.hash || "SHA-256",
+        },
+        material,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["decrypt"]
+      );
+      const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, data);
+      return JSON.parse(new TextDecoder().decode(plain));
+    }
+
+    function renderLogin(payload) {
+      const app = document.getElementById("app");
+      const box = el("div", { class: "login" });
+      box.append(el("h1", { text: "แดชบอร์ดช่อง YouTube" }));
+      box.append(el("p", { text: "กรอกรหัสผ่านเพื่อถอดรหัสข้อมูลในเครื่องนี้ รหัสไม่ถูกส่งไปเซิร์ฟเวอร์" }));
+      const form = el("form");
+      const input = el("input", {
+        type: "password",
+        autocomplete: "current-password",
+        placeholder: "รหัสผ่าน",
+        "aria-label": "รหัสผ่าน",
+      });
+      const btn = el("button", { type: "submit", class: "refresh-btn", text: "เข้าสู่ระบบ" });
+      const err = el("p", { class: "error", text: "รหัสผ่านไม่ถูกต้อง" });
+      form.append(input, btn, err);
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const password = input.value;
+        if (!password) {
+          err.textContent = "กรอกรหัสผ่านก่อน";
+          err.classList.add("show");
+          return;
+        }
+        btn.disabled = true;
+        err.classList.remove("show");
+        try {
+          const data = await decryptData(payload, password);
+          snapshotData = data;
+          liveMeta = { status: "idle", error: null, fetchedAt: null, studioError: null, competitorError: null, analyticsOk: {}, mineNote: "" };
+          accessToken = null;
+          tokenExpiresAt = 0;
+          renderPage(deepClone(snapshotData));
+        } catch (ex) {
+          err.textContent = "รหัสผ่านไม่ถูกต้อง";
+          err.classList.add("show");
+          btn.disabled = false;
+          input.focus();
+        }
+      });
+      box.append(form);
+      app.replaceChildren(box);
+      queueMicrotask(() => input.focus());
+    }
+
+    async function boot() {
+      const app = document.getElementById("app");
+      try {
+        const res = await fetch("data.enc.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("missing enc");
+        renderLogin(await res.json());
+      } catch (err) {
+        app.replaceChildren(el("p", { class: "error", text: "โหลดข้อมูลเข้ารหัสไม่ได้นะ ให้ตั้ง DASHBOARD_PASSWORD แล้วรัน python3 build_data.py เพื่อสร้าง data.enc.json เปิดผ่านเซิร์ฟเวอร์ อย่าอัปโหลด data.json ขึ้น GitHub Pages" }));
+      }
+    }
+
+
+    function bangkokYmd(date) {
+      return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Bangkok",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(date || new Date());
+    }
+    function addDaysYmd(ymd, delta) {
+      const parts = ymd.split("-").map(Number);
+      const dt = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+      dt.setUTCDate(dt.getUTCDate() + delta);
+      return dt.toISOString().slice(0, 10);
+    }
+    function last28Range() {
+      const end = bangkokYmd();
+      return { start: addDaysYmd(end, -27), end: end };
+    }
+    function parseIsoDuration(text) {
+      const m = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/.exec(text || "");
+      if (!m) return null;
+      return ((Number(m[1]) || 0) * 3600) + ((Number(m[2]) || 0) * 60) + (Number(m[3]) || 0);
+    }
+    function nowBangkokIso() {
+      const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Bangkok",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).formatToParts(new Date());
+      const get = (t) => (parts.find((p) => p.type === t) || {}).value;
+      return get("year") + "-" + get("month") + "-" + get("day") + "T" + get("hour") + ":" + get("minute") + "+07:00";
+    }
+    function waitForGis(timeout) {
+      const ms = timeout || 15000;
+      return new Promise((resolve, reject) => {
+        if (window.google && google.accounts && google.accounts.oauth2) return resolve();
+        const t0 = Date.now();
+        const iv = setInterval(() => {
+          if (window.google && google.accounts && google.accounts.oauth2) {
+            clearInterval(iv);
+            resolve();
+          } else if (Date.now() - t0 > ms) {
+            clearInterval(iv);
+            const err = new Error("gis timeout");
+            err.reason = "gis";
+            reject(err);
+          }
+        }, 100);
+      });
+    }
+    function classifyLiveError(err) {
+      const status = err && err.status;
+      const reason = String((err && err.reason) || "");
+      const msg = String((err && err.message) || "");
+      const blob = reason + " " + msg + " " + JSON.stringify((err && err.body) || {});
+      if (reason === "gis") return "โหลดหน้าเข้าสู่ระบบของ Google ไม่สำเร็จ ลองรีเฟรชหน้านี้ ส่วนอื่นยังใช้สำเนารายวันได้";
+      if (status === "access_denied" || status === "popup_closed_by_user" || /access_denied|popup_closed|user_denied/i.test(blob)) {
+        return "เข้าสู่ระบบ Google ไม่สำเร็จ หรือยกเลิกไปแล้ว ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
+      }
+      if (/quotaExceeded|dailyLimitExceeded|rateLimitExceeded/i.test(blob)) {
+        return "โควตา YouTube API เต็มชั่วคราว ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
+      }
+      if (status === 401) return "สิทธิ์หมดอายุหรือยังไม่ได้อนุญาต ลองเข้าสู่ระบบอีกครั้ง ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
+      if (status === 403) return "YouTube ปฏิเสธคำขอ อาจเพราะบัญชีนี้ไม่มีสิทธิ์ดูช่อง หรือโควตาเต็ม ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
+      if (/Failed to fetch|NetworkError|network|offline|TypeError|gis timeout/i.test(msg)) {
+        return "เชื่อมต่อเครือข่ายไปยัง YouTube ไม่ได้ ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
+      }
+      return "ดึงข้อมูลสดจาก YouTube ไม่สำเร็จ ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
+    }
+    async function ytFetch(url) {
+      const res = await fetch(url, { headers: { Authorization: "Bearer " + accessToken } });
+      const text = await res.text();
+      let body = null;
+      try { body = text ? JSON.parse(text) : null; } catch (e) { body = text; }
+      if (!res.ok) {
+        const err = new Error("HTTP " + res.status);
+        err.status = res.status;
+        err.body = body;
+        const details = body && body.error && body.error.errors && body.error.errors[0];
+        err.reason = (details && details.reason) || (body && body.error && body.error.status) || "";
+        throw err;
+      }
+      return body;
+    }
+    async function requestAccessToken(prompt) {
+      if (!googleClientId()) throw new Error("missing client id");
+      await waitForGis();
+      if (!tokenClient) {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: googleClientId(),
+          scope: YT_SCOPES,
+          hint: "sitthinon.ma@gmail.com",
+          callback: function () {},
+        });
+      }
+      return new Promise((resolve, reject) => {
+        tokenClient.callback = function (resp) {
+          if (!resp || resp.error) {
+            const err = new Error((resp && (resp.error_description || resp.error)) || "access_denied");
+            err.status = resp && resp.error;
+            reject(err);
+            return;
+          }
+          accessToken = resp.access_token;
+          tokenExpiresAt = Date.now() + ((Number(resp.expires_in) || 3600) - 60) * 1000;
+          resolve(accessToken);
+        };
+        tokenClient.requestAccessToken({ prompt: prompt || "", hint: "sitthinon.ma@gmail.com" });
+      });
+    }
+    function parseReport(payload) {
+      const headers = ((payload && payload.columnHeaders) || []).map((h) => h.name);
+      const rows = (payload && payload.rows) || [];
+      return rows.map((row) => {
+        const out = {};
+        headers.forEach((name, i) => { out[name] = row[i]; });
+        return out;
+      });
+    }
+    function metricsFromRow(row) {
+      if (!row) return null;
+      const minutes = Number(row.estimatedMinutesWatched || 0);
+      return {
+        views: Number(row.views || 0),
+        watch_time_hours: minutes / 60,
+        subscribers_attributed: Number(row.subscribersGained || 0),
+        subscribers_gained: Number(row.subscribersGained || 0),
+        impressions: row.impressions == null ? null : Number(row.impressions),
+        ctr_percent: row.impressionClickThroughRate == null ? null : Number(row.impressionClickThroughRate),
+        average_view_duration_seconds: row.averageViewDuration == null ? null : Number(row.averageViewDuration),
+        average_percentage_viewed: row.averageViewPercentage == null ? null : Number(row.averageViewPercentage),
+      };
+    }
+    async function analyticsReport(channelId, start, end, extra) {
+      const params = new URLSearchParams({
+        ids: "channel==" + channelId,
+        startDate: start,
+        endDate: end,
+        metrics: "views,estimatedMinutesWatched,subscribersGained,averageViewDuration,averageViewPercentage,impressions,impressionClickThroughRate",
+      });
+      if (extra) {
+        Object.keys(extra).forEach((k) => params.set(k, String(extra[k])));
+      }
+      return ytFetch("https://youtubeanalytics.googleapis.com/v2/reports?" + params.toString());
+    }
+    async function fetchChannelsByIds(ids) {
+      const unique = [...new Set(ids.filter(Boolean))];
+      const out = {};
+      for (let i = 0; i < unique.length; i += 50) {
+        const chunk = unique.slice(i, i + 50);
+        const data = await ytFetch("https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id=" + encodeURIComponent(chunk.join(",")) + "&maxResults=50");
+        for (const item of data.items || []) out[item.id] = item;
+      }
+      return out;
+    }
+    async function fetchVideosByIds(ids) {
+      const unique = [...new Set(ids.filter(Boolean))];
+      const out = {};
+      for (let i = 0; i < unique.length; i += 50) {
+        const chunk = unique.slice(i, i + 50);
+        const data = await ytFetch("https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&id=" + encodeURIComponent(chunk.join(",")) + "&maxResults=50");
+        for (const item of data.items || []) out[item.id] = item;
+      }
+      return out;
+    }
+    function mergeLiveIntoSnapshot(live) {
+      const data = deepClone(snapshotData);
+      const studio = data.sources && data.sources.studio;
+      if (studio && studio.channels) {
+        for (const ch of studio.channels) {
+          const pub = live.channels[ch.id];
+          const an = live.analytics[ch.id];
+          const lifeStats = pub && pub.statistics ? pub.statistics : null;
+          ch.live = {
+            data_api_ok: !!lifeStats,
+            analytics_ok: !!(an && an.ok),
+            fetched_at: live.fetchedAt,
+            lifetime: lifeStats ? {
+              views: Number(lifeStats.viewCount || 0),
+              subscribers: lifeStats.hiddenSubscriberCount ? null : Number(lifeStats.subscriberCount || 0),
+              subscribers_hidden: !!lifeStats.hiddenSubscriberCount,
+              video_count: Number(lifeStats.videoCount || 0),
+            } : (ch.totals_lifetime || null),
+            last_28d: (an && an.ok && an.last28) ? Object.assign({}, an.last28, {
+              video_count: ch.totals && ch.totals.video_count,
+              videos_with_views: ch.totals && ch.totals.videos_with_views,
+            }) : null,
+          };
+          if (an && an.ok && an.videos && an.videos.length) {
+            ch.top_videos = an.videos;
+          }
+        }
+      }
+      const ta = data.sources && data.sources.tubealfred;
+      if (ta) {
+        for (const v of ta.outliers || []) {
+          const item = live.videos[v.id];
+          if (item && item.statistics) {
+            v.views_live = Number(item.statistics.viewCount || 0);
+            if (item.contentDetails && item.contentDetails.duration) {
+              const sec = parseIsoDuration(item.contentDetails.duration);
+              if (sec != null) {
+                v.length_seconds = sec;
+              }
+            }
+          }
+        }
+      }
+      // advice stays as in snapshot
+      return data;
+    }
+    async function pullLive() {
+      const range = last28Range();
+      const studioCh = (((snapshotData || {}).sources || {}).studio || {}).channels || [];
+      const ownedIds = studioCh.map((c) => c.id).filter(Boolean);
+      const ta = ((snapshotData || {}).sources || {}).tubealfred || {};
+      const peerIds = (ta.peers || []).map((p) => p.id).filter(Boolean);
+      const videoIds = (ta.outliers || []).map((v) => v.id).filter(Boolean);
+      const channels = await fetchChannelsByIds(ownedIds.concat(peerIds));
+      let mineNote = "";
+      try {
+        const mine = await ytFetch("https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&mine=true");
+        const mineItem = (mine.items || [])[0];
+        if (mineItem && mineItem.id && ownedIds.indexOf(mineItem.id) === -1) {
+          mineNote = "บัญชีที่เข้าสู่ระบบมีช่อง «" + ((mineItem.snippet && mineItem.snippet.title) || mineItem.id) + "» ซึ่งไม่ใช่ 4 ช่องในแดชบอร์ดนี้ ลองออกแล้วเข้าใหม่ด้วย sitthinon.ma@gmail.com";
+        }
+      } catch (err) {
+        // mine=true is optional; owned analytics may still work
+      }
+      const analytics = {};
+      let studioError = null;
+      let anyAnalytics = false;
+      for (const id of ownedIds) {
+        try {
+          const overview = await analyticsReport(id, range.start, range.end);
+          const videoReport = await analyticsReport(id, range.start, range.end, { dimensions: "video", sort: "-views", maxResults: 10 });
+          const last28 = metricsFromRow(parseReport(overview)[0]);
+          const videoRows = parseReport(videoReport);
+          const vids = videoRows.map((r) => r.video).filter(Boolean);
+          const vmeta = await fetchVideosByIds(vids);
+          const videos = videoRows.map((r) => {
+            const meta = vmeta[r.video] || {};
+            const stats = metricsFromRow(r) || {};
+            const sn = meta.snippet || {};
+            return {
+              id: r.video,
+              title: sn.title || r.video,
+              url: "https://www.youtube.com/watch?v=" + r.video,
+              views: stats.views,
+              views_28d: stats.views,
+              views_lifetime: meta.statistics ? Number(meta.statistics.viewCount || 0) : null,
+              subscribers: stats.subscribers_attributed,
+              average_percentage_viewed: stats.average_percentage_viewed,
+              ctr_percent: stats.ctr_percent,
+              duration_seconds: meta.contentDetails ? parseIsoDuration(meta.contentDetails.duration) : null,
+            };
+          });
+          analytics[id] = { ok: true, last28: last28, videos: videos };
+          anyAnalytics = true;
+        } catch (err) {
+          analytics[id] = { ok: false, error: classifyLiveError(err) };
+          if (!studioError) studioError = classifyLiveError(err);
+        }
+      }
+      if (ownedIds.length && !anyAnalytics && studioError) {
+        // keep studioError
+      } else if (anyAnalytics) {
+        const failed = ownedIds.filter((id) => analytics[id] && !analytics[id].ok).length;
+        studioError = failed ? ("ดึง Analytics ได้บางช่อง ช่องที่ดึงไม่ได้ยังใช้สำเนา 28 วัน") : null;
+      }
+      let videos = {};
+      let competitorError = null;
+      try {
+        videos = await fetchVideosByIds(videoIds);
+      } catch (err) {
+        competitorError = classifyLiveError(err);
+      }
+      return {
+        fetchedAt: nowBangkokIso(),
+        range: range,
+        channels: channels,
+        analytics: analytics,
+        videos: videos,
+        studioError: studioError,
+        competitorError: competitorError,
+        mineNote: mineNote,
+      };
+    }
+    async function startLive(prompt) {
+      if (!snapshotData) return;
+      liveMeta.status = "connecting";
+      liveMeta.studioError = null;
+      liveMeta.competitorError = null;
+      renderPage(deepClone(snapshotData));
+      try {
+        const needPrompt = prompt || (accessToken && Date.now() < tokenExpiresAt ? "" : "consent");
+        if (!accessToken || Date.now() >= tokenExpiresAt || prompt === "consent") {
+          await requestAccessToken(needPrompt);
+        }
+        const live = await pullLive();
+        liveMeta.status = "ok";
+        liveMeta.fetchedAt = live.fetchedAt;
+        liveMeta.studioError = live.studioError;
+        liveMeta.competitorError = live.competitorError;
+        liveMeta.mineNote = live.mineNote || "";
+        renderPage(mergeLiveIntoSnapshot(live));
+      } catch (err) {
+        liveMeta.status = "error";
+        const reason = classifyLiveError(err);
+        liveMeta.studioError = reason;
+        liveMeta.competitorError = reason;
+        liveMeta.error = reason;
+        renderPage(deepClone(snapshotData));
+      }
+    }
+    function signOutYoutube() {
+      const done = () => {
+        accessToken = null;
+        tokenExpiresAt = 0;
+        liveMeta = { status: "idle", error: null, fetchedAt: null, studioError: null, competitorError: null, analyticsOk: {}, mineNote: "" };
+        if (snapshotData) renderPage(deepClone(snapshotData));
+      };
+      try {
+        if (accessToken && window.google && google.accounts && google.accounts.oauth2) {
+          google.accounts.oauth2.revoke(accessToken, done);
+          setTimeout(done, 1500);
+          return;
+        }
+      } catch (e) {}
+      done();
+    }
+
+    boot();
+  </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# Never publish plaintext analytics or secrets
+data.json
+data.js
+studio/
+.env
+.env.*
+build_data.py
+tubealfred.json
+__pycache__/
