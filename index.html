@@ -123,6 +123,50 @@
     .chart-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.28); }
     .chart-card h3 { margin-bottom: 4px; }
     .chart-wrap { position: relative; height: 270px; }
+
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 12px 0 16px; }
+    .table-scroll table { margin: 0; min-width: 640px; }
+    .table-scroll th, .table-scroll td { white-space: nowrap; }
+    .table-scroll td:first-child, .table-scroll th:first-child { min-width: 9.5rem; }
+    .h-narrow { display: none; }
+    .from-studio { color: var(--muted); font-size: 0.75rem; font-weight: 500; margin-left: 6px; white-space: nowrap; }
+    .partial-note {
+      font-size: 0.88rem;
+      color: var(--muted);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin: 0 0 14px;
+    }
+    .partial-note strong { display: block; color: var(--text); margin-bottom: 4px; }
+    .partial-note li { margin: 0 0 4px; }
+    .channel-cards { display: none; gap: 12px; margin: 12px 0 16px; }
+    .channel-card {
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: var(--glass);
+      border: 1px solid var(--line);
+    }
+    .channel-card h3 { margin: 0 0 10px; font-size: 1.05rem; }
+    .channel-card .crow {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.92rem;
+    }
+    .channel-card .crow:last-child { border-bottom: 0; }
+    .channel-card .k { color: var(--muted); }
+    .channel-card .v { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; }
+    @media (max-width: 640px) {
+      .h-wide { display: none; }
+      .h-narrow { display: inline; }
+      .channel-table-wrap { display: none; }
+      .channel-cards { display: grid; }
+    }
     table { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin: 12px 0 16px; }
     th, td { text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
     th:not(:first-child), td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
@@ -333,6 +377,56 @@
       if (ch && ch.live && ch.live.lifetime) return ch.live.lifetime;
       return (ch && ch.totals_lifetime) || null;
     }
+    function snapshotChannelCtr(ch) {
+      const t = ch && ch.totals;
+      return t && t.ctr_percent != null ? t.ctr_percent : null;
+    }
+    function snapshotVideoCtr(videoId) {
+      if (!videoId) return null;
+      const channels = ((((snapshotData || {}).sources || {}).studio || {}).channels) || [];
+      for (const ch of channels) {
+        const lists = [ch.videos, ch.top_videos, ch.top_videos_lifetime, ch.bottom_videos];
+        for (const list of lists) {
+          for (const v of list || []) {
+            if (v.id === videoId && v.ctr_percent != null) return v.ctr_percent;
+          }
+        }
+      }
+      return null;
+    }
+    function appendCtr(node, liveCtr, snapshotCtr) {
+      if (liveCtr != null && Number.isFinite(Number(liveCtr))) {
+        node.append(fmtPct(liveCtr));
+        return node;
+      }
+      if (snapshotCtr != null && Number.isFinite(Number(snapshotCtr))) {
+        node.append(fmtPct(snapshotCtr));
+        node.append(el("span", { class: "from-studio", text: "จาก Studio" }));
+        return node;
+      }
+      node.append("—");
+      return node;
+    }
+    function ctrCell(liveCtr, snapshotCtr) {
+      return appendCtr(el("td"), liveCtr, snapshotCtr);
+    }
+    function thPair(wide, narrow) {
+      const th = el("th");
+      th.append(el("span", { class: "h-wide", text: wide }));
+      th.append(el("span", { class: "h-narrow", text: narrow || wide }));
+      return th;
+    }
+    function wrapTable(table) {
+      return el("div", { class: "table-scroll" }, table);
+    }
+    function sectionPartial(lines) {
+      const box = el("div", { class: "partial-note" });
+      box.append(el("strong", { text: "ดึงข้อมูลสดได้บางส่วน" }));
+      const ul = el("ul");
+      for (const line of lines || []) ul.append(el("li", { text: line }));
+      box.append(ul);
+      return box;
+    }
     const el = (tag, attrs = {}, kids = []) => {
       const node = document.createElement(tag);
       for (const [k, v] of Object.entries(attrs)) {
@@ -472,13 +566,13 @@
       if (caption) wrap.append(el("h3", { text: caption }));
       const table = el("table");
       table.append(el("thead", {}, el("tr", {}, [
-        el("th", { text: "คลิป" }),
-        el("th", { text: "วิวตลอดชีพ" }),
-        el("th", { text: "วิว 28 วัน" }),
-        el("th", { text: "ผู้ติดตาม 28 วัน" }),
-        el("th", { text: "% การดู" }),
-        el("th", { text: "CTR" }),
-        el("th", { text: "วินาที" }),
+        thPair("คลิป", "คลิป"),
+        thPair("วิวตลอดชีพ", "ตลอดชีพ"),
+        thPair("วิว 28 วัน", "28 วัน"),
+        thPair("ผู้ติดตาม 28 วัน", "ติดตาม"),
+        thPair("% การดู", "% ดู"),
+        thPair("CTR", "CTR"),
+        thPair("วินาที", "วินาที"),
       ])));
       const body = el("tbody");
       for (const v of videos) {
@@ -492,12 +586,12 @@
           el("td", { text: fmt(views28) }),
           el("td", { text: fmt(v.subscribers) }),
           el("td", { text: fmtPct(v.average_percentage_viewed) }),
-          el("td", { text: fmtPct(v.ctr_percent) }),
+          ctrCell(v.ctr_percent, snapshotVideoCtr(v.id)),
           el("td", { text: v.duration_seconds == null ? "—" : fmt(v.duration_seconds) }),
         ]));
       }
       table.append(body);
-      wrap.append(table);
+      wrap.append(wrapTable(table));
       return wrap;
     }
 
@@ -534,20 +628,18 @@
       const box = el("div", { id: "channel-panel" });
       box.append(el("h3", { text: ch.name + " (" + ch.handle + ")" }));
       const props = el("table");
-      const rows = [
-        ["วิวตลอดชีพ", life ? fmt(life.views) : "—"],
-        ["วิวในช่วง 28 วัน", fmt(t.views)],
-        ["ผู้ติดตามจากคลิปตลอดชีพ", life ? fmt(life.subscribers_attributed ?? life.subscribers) : "—"],
-        ["ผู้ติดตามจากคลิปในช่วง 28 วัน", fmt(t.subscribers_attributed ?? t.subscribers_gained)],
-        ["ชั่วโมงดูในช่วง 28 วัน", fmtHours(t.watch_time_hours)],
-        ["CTR ภาพปกในช่วง 28 วัน", fmtPct(t.ctr_percent)],
-        ["เปอร์เซ็นต์การดูเฉลี่ยในช่วง 28 วัน", fmtPct(t.average_percentage_viewed)],
-        ["จำนวนคลิปในช่วง 28 วัน", fmt(t.video_count) + (t.videos_with_views != null ? " (มีวิว " + fmt(t.videos_with_views) + " คลิป)" : "")],
-      ];
-      for (const [k, v] of rows) {
-        props.append(el("tr", {}, [el("td", { text: k }), el("td", { text: v })]));
-      }
-      box.append(props);
+      const addRow = (label, valueNode) => {
+        props.append(el("tr", {}, [el("td", { text: label }), valueNode]));
+      };
+      addRow("วิวตลอดชีพ", el("td", { text: life ? fmt(life.views) : "—" }));
+      addRow("วิวในช่วง 28 วัน", el("td", { text: fmt(t.views) }));
+      addRow("ผู้ติดตามจากคลิปตลอดชีพ", el("td", { text: life ? fmt(life.subscribers_attributed ?? life.subscribers) : "—" }));
+      addRow("ผู้ติดตามจากคลิปในช่วง 28 วัน", el("td", { text: fmt(t.subscribers_attributed ?? t.subscribers_gained) }));
+      addRow("ชั่วโมงดูในช่วง 28 วัน", el("td", { text: fmtHours(t.watch_time_hours) }));
+      addRow("CTR ภาพปกในช่วง 28 วัน", appendCtr(el("td"), t.ctr_percent, snapshotChannelCtr(ch)));
+      addRow("เปอร์เซ็นต์การดูเฉลี่ยในช่วง 28 วัน", el("td", { text: fmtPct(t.average_percentage_viewed) }));
+      addRow("จำนวนคลิปในช่วง 28 วัน", el("td", { text: fmt(t.video_count) + (t.videos_with_views != null ? " (มีวิว " + fmt(t.videos_with_views) + " คลิป)" : "") }));
+      box.append(wrapTable(props));
       const tops = (ch.top_videos || []).filter((v) => (v.views || 0) > 0);
       if (tops.length) {
         const card = el("div", { class: "chart-card" });
@@ -597,6 +689,8 @@
       if (lag) section.append(el("p", { class: "caveat", text: lag }));
       if (liveMeta.studioError) {
         section.append(sectionError(liveMeta.studioError, liveMeta.fetchedAt || (data && data.generated_at)));
+      } else if (liveMeta.studioPartial && liveMeta.studioPartial.length) {
+        section.append(sectionPartial(liveMeta.studioPartial));
       }
       if (liveMeta.mineNote) section.append(el("p", { class: "caveat", text: liveMeta.mineNote }));
 
@@ -626,11 +720,21 @@
       });
 
       const table = el("table");
-      table.append(el("thead", {}, el("tr", {}, ["ช่อง", "วิวตลอดชีพ", "วิว 28 วัน", "ผู้ติดตามตลอดชีพ", "ผู้ติดตาม 28 วัน", "ชม.ดู 28 วัน", "CTR 28 วัน"].map((h) => el("th", { text: h })))));
+      table.append(el("thead", {}, el("tr", {}, [
+        thPair("ช่อง", "ช่อง"),
+        thPair("วิวตลอดชีพ", "ตลอดชีพ"),
+        thPair("วิว 28 วัน", "28 วัน"),
+        thPair("ผู้ติดตามตลอดชีพ", "ติดตามรวม"),
+        thPair("ผู้ติดตาม 28 วัน", "ติดตาม 28 วัน"),
+        thPair("ชม.ดู 28 วัน", "ชม.ดู"),
+        thPair("CTR 28 วัน", "CTR"),
+      ])));
       const tb = el("tbody");
+      const cards = el("div", { class: "channel-cards" });
       for (const c of byViews) {
         const pt = periodTotals(c);
         const lt = lifetimeTotals(c) || {};
+        const ctrTd = ctrCell(pt.ctr_percent, snapshotChannelCtr(c));
         tb.append(el("tr", {}, [
           el("td", { text: c.name }),
           el("td", { text: fmt(lt.views) }),
@@ -638,11 +742,30 @@
           el("td", { text: fmt(lt.subscribers_attributed ?? lt.subscribers) }),
           el("td", { text: fmt(pt.subscribers_attributed ?? pt.subscribers_gained) }),
           el("td", { text: fmtHours(pt.watch_time_hours) }),
-          el("td", { text: fmtPct(pt.ctr_percent) }),
+          ctrTd,
         ]));
+        const card = el("article", { class: "channel-card" });
+        card.append(el("h3", { text: c.name }));
+        const addCrow = (k, vNode) => {
+          const row = el("div", { class: "crow" });
+          row.append(el("span", { class: "k", text: k }));
+          const v = el("span", { class: "v" });
+          if (typeof vNode === "string") v.append(vNode);
+          else v.append(vNode);
+          row.append(v);
+          card.append(row);
+        };
+        addCrow("วิวตลอดชีพ", fmt(lt.views));
+        addCrow("วิว 28 วัน", fmt(pt.views));
+        addCrow("ผู้ติดตามตลอดชีพ", fmt(lt.subscribers_attributed ?? lt.subscribers));
+        addCrow("ผู้ติดตาม 28 วัน", fmt(pt.subscribers_attributed ?? pt.subscribers_gained));
+        addCrow("ชม.ดู 28 วัน", fmtHours(pt.watch_time_hours));
+        addCrow("CTR 28 วัน", appendCtr(el("span"), pt.ctr_percent, snapshotChannelCtr(c)));
+        cards.append(card);
       }
       table.append(tb);
-      section.append(table);
+      const tableWrap = el("div", { class: "channel-table-wrap" }, wrapTable(table));
+      section.append(tableWrap, cards);
       section.append(el("p", { class: "caveat", text: "ผู้ติดตามในคอลัมน์ 28 วันและตลอดชีพของ Studio คือผู้ติดตามที่โยงกับคลิป ไม่ใช่ยอดรวมหน้าช่อง หลังเชื่อม Google ยอดผู้ติดตามตลอดชีพจะเป็นยอดรวมหน้าช่องจาก Data API ซึ่งคนละตัวเลข ยอดวิว Shorts สูงกว่ายอดแสดงผลภาพปกได้ เพราะคนส่วนใหญ่มาจากฟีด Shorts" }));
 
       if (ai) {
@@ -706,6 +829,8 @@
       if (src.method) section.append(el("p", { class: "caveat", text: src.method + (src.pulled_at ? " ดึง " + formatUpdated(src.pulled_at) : "") }));
       if (liveMeta.competitorError) {
         section.append(sectionError(liveMeta.competitorError, liveMeta.fetchedAt || src.pulled_at));
+      } else if (liveMeta.competitorPartial && liveMeta.competitorPartial.length) {
+        section.append(sectionPartial(liveMeta.competitorPartial));
       }
 
       const peers = src.peers || [];
@@ -731,12 +856,18 @@
           ]));
         }
         table.append(tb);
-        section.append(table);
+        section.append(wrapTable(table));
       }
       if (outliers.length) {
         section.append(el("h3", { text: "คลิปที่มียอดสูง (ตัวอย่างที่พบ)" }));
         const table = el("table");
-        table.append(el("thead", {}, el("tr", {}, ["คลิป", "ช่อง", "วิวสาธารณะ", "ความยาว", "เมื่อไหร่"].map((h) => el("th", { text: h })))));
+        table.append(el("thead", {}, el("tr", {}, [
+          thPair("คลิป", "คลิป"),
+          thPair("ช่อง", "ช่อง"),
+          thPair("วิวสาธารณะ", "วิว"),
+          thPair("ความยาว", "ยาว"),
+          thPair("เมื่อไหร่", "เมื่อไหร่"),
+        ])));
         const tb = el("tbody");
         for (const v of outliers) {
           const title = v.url ? el("a", { href: v.url, target: "_blank", rel: "noopener", text: v.title }) : v.title;
@@ -750,7 +881,7 @@
           ]));
         }
         table.append(tb);
-        section.append(table);
+        section.append(wrapTable(table));
       }
       const patterns = src.patterns || [];
       if (patterns.length) {
@@ -1502,22 +1633,20 @@
         }
       }
 
-      let studioError = null;
-      if (!anyPublic && publicOwned.errors.length) {
-        studioError = publicOwned.errors.map((e) => e.error).join(" ");
-      } else if (!anyAnalytics && analyticsErrors.length) {
-        studioError = "ยอดสาธารณะดึงได้บางส่วน แต่ Analytics ดึงไม่ได้: " + analyticsErrors.join(" | ");
-      } else if (analyticsErrors.length) {
-        studioError = "ดึงได้บางช่อง ช่องที่ไม่ได้ยังใช้สำเนา 28 วัน — " + analyticsErrors.join(" | ");
-      } else if (channelErrors.length && !anyPublic) {
-        studioError = channelErrors.map((e) => e.error).join(" ");
-      }
+      const failedParts = [];
+      for (const e of publicOwned.errors || []) failedParts.push(e.error);
+      for (const line of analyticsErrors) failedParts.push(line);
+      const allLiveFailed = !anyPublic && !anyAnalytics;
+      const studioError = allLiveFailed ? (failedParts.join(" ") || "ดึงข้อมูลสดจาก YouTube ไม่สำเร็จ ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้") : null;
+      const studioPartial = !allLiveFailed && failedParts.length ? failedParts : [];
 
       const videoPack = await fetchVideosByIds(videoIds);
       let competitorError = null;
+      let competitorPartial = [];
       if (videoPack.errors && videoPack.errors.length) {
-        if (!Object.keys(videoPack.videos).length) competitorError = videoPack.errors.map((e) => e.error).join(" ");
-        else competitorError = "ดึงยอดคู่แข่งได้บางคลิป: " + videoPack.errors.map((e) => e.error).join(" | ");
+        const parts = videoPack.errors.map((e) => e.error);
+        if (!Object.keys(videoPack.videos).length) competitorError = parts.join(" ");
+        else competitorPartial = parts;
       }
 
       return {
@@ -1527,7 +1656,9 @@
         analytics: analytics,
         videos: videoPack.videos || {},
         studioError: studioError,
+        studioPartial: studioPartial,
         competitorError: competitorError,
+        competitorPartial: competitorPartial,
         mineNote: mineNote,
         channelErrors: analyticsErrors,
       };
@@ -1536,7 +1667,9 @@
       if (!snapshotData) return;
       liveMeta.status = "connecting";
       liveMeta.studioError = null;
+      liveMeta.studioPartial = [];
       liveMeta.competitorError = null;
+      liveMeta.competitorPartial = [];
       liveMeta.channelErrors = [];
       liveMeta.mineNote = "";
       renderPage(deepClone(snapshotData));
@@ -1554,7 +1687,9 @@
         else if (liveMeta.mineNote) live.mineNote = liveMeta.mineNote;
         liveMeta.fetchedAt = live.fetchedAt;
         liveMeta.studioError = live.studioError;
+        liveMeta.studioPartial = live.studioPartial || [];
         liveMeta.competitorError = live.competitorError;
+        liveMeta.competitorPartial = live.competitorPartial || [];
         liveMeta.mineNote = live.mineNote || "";
         liveMeta.channelErrors = live.channelErrors || [];
         try {
