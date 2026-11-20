@@ -1201,24 +1201,51 @@
         }, 100);
       });
     }
+    const KNOWN_CHANNEL_IDS = [
+      "UCyOuU0yV0jRVwDspLgyQA-A",
+      "UC_slhvlfZLI1JD69isxw1qw",
+      "UCjbUOv-P--xISPoKtx0Ai8Q",
+      "UCXLKx_9peh5TMgNr0ZIcoDg",
+    ];
+    const ANALYTICS_METRICS_FULL = "views,estimatedMinutesWatched,subscribersGained,averageViewDuration,averageViewPercentage,impressions,impressionClickThroughRate";
+    const ANALYTICS_METRICS_BASIC = "views,estimatedMinutesWatched,subscribersGained,averageViewDuration,averageViewPercentage";
+
+    function scrubSecrets(text) {
+      return String(text == null ? "" : text)
+        .replace(/ya29\.[0-9A-Za-z._~\-]+/g, "[token]")
+        .replace(/Bearer\s+[^\s]+/gi, "Bearer [token]")
+        .replace(/access_token=[^&\s]+/gi, "access_token=[token]")
+        .replace(/x-access-token:[^@\s]+/gi, "x-access-token=[token]");
+    }
+    function apiErrorDetail(err) {
+      if (!err) return { status: "", reason: "", message: "ไม่ทราบสาเหตุ" };
+      const status = err.status == null ? "" : err.status;
+      let reason = err.reason || "";
+      let message = "";
+      const body = err.body;
+      if (body && typeof body === "object" && body.error) {
+        message = body.error.message || "";
+        const first = body.error.errors && body.error.errors[0];
+        if (!reason) reason = (first && (first.reason || first.message)) || body.error.status || "";
+      } else if (typeof body === "string" && body) {
+        message = body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
+      }
+      if (!message) message = err.message || "";
+      return { status: status, reason: reason, message: scrubSecrets(message).slice(0, 400) };
+    }
+    function formatApiError(err, prefix) {
+      const d = apiErrorDetail(err);
+      const bits = [];
+      if (d.status !== "") bits.push("HTTP " + d.status);
+      if (d.reason) bits.push(String(d.reason));
+      const head = bits.length ? " (" + bits.join(" · ") + ")" : "";
+      let out = (prefix || "ดึงข้อมูลสดจาก YouTube ไม่สำเร็จ") + head;
+      if (d.message) out += " — " + d.message;
+      if (out.indexOf("ยังใช้สำเนารายวัน") === -1) out += " ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
+      return out;
+    }
     function classifyLiveError(err) {
-      const status = err && err.status;
-      const reason = String((err && err.reason) || "");
-      const msg = String((err && err.message) || "");
-      const blob = reason + " " + msg + " " + JSON.stringify((err && err.body) || {});
-      if (reason === "gis") return "โหลดหน้าเข้าสู่ระบบของ Google ไม่สำเร็จ ลองรีเฟรชหน้านี้ ส่วนอื่นยังใช้สำเนารายวันได้";
-      if (status === "access_denied" || status === "popup_closed_by_user" || /access_denied|popup_closed|user_denied/i.test(blob)) {
-        return "เข้าสู่ระบบ Google ไม่สำเร็จ หรือยกเลิกไปแล้ว ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
-      }
-      if (/quotaExceeded|dailyLimitExceeded|rateLimitExceeded/i.test(blob)) {
-        return "โควตา YouTube API เต็มชั่วคราว ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
-      }
-      if (status === 401) return "สิทธิ์หมดอายุหรือยังไม่ได้อนุญาต ลองเข้าสู่ระบบอีกครั้ง ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
-      if (status === 403) return "YouTube ปฏิเสธคำขอ อาจเพราะบัญชีนี้ไม่มีสิทธิ์ดูช่อง หรือโควตาเต็ม ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
-      if (/Failed to fetch|NetworkError|network|offline|TypeError|gis timeout/i.test(msg)) {
-        return "เชื่อมต่อเครือข่ายไปยัง YouTube ไม่ได้ ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
-      }
-      return "ดึงข้อมูลสดจาก YouTube ไม่สำเร็จ ยังใช้สำเนารายวัน ส่วนอื่นยังใช้ได้";
+      return formatApiError(err);
     }
     async function ytFetch(url) {
       const res = await fetch(url, { headers: { Authorization: "Bearer " + accessToken } });
@@ -1242,6 +1269,7 @@
         tokenClient = google.accounts.oauth2.initTokenClient({
           client_id: googleClientId(),
           scope: YT_SCOPES,
+          include_granted_scopes: true,
           hint: "sitthinon.ma@gmail.com",
           callback: function () {},
         });
@@ -1256,7 +1284,16 @@
           }
           accessToken = resp.access_token;
           tokenExpiresAt = Date.now() + ((Number(resp.expires_in) || 3600) - 60) * 1000;
-          resolve(accessToken);
+          const scopes = YT_SCOPES.split(" ").filter(Boolean);
+          let granted = true;
+          try {
+            if (google.accounts.oauth2.hasGrantedAllScopes) {
+              granted = google.accounts.oauth2.hasGrantedAllScopes.apply(google.accounts.oauth2, [resp].concat(scopes));
+            }
+          } catch (e) {
+            granted = true;
+          }
+          resolve({ granted: granted, resp: resp });
         };
         tokenClient.requestAccessToken({ prompt: prompt || "", hint: "sitthinon.ma@gmail.com" });
       });
@@ -1284,45 +1321,68 @@
         average_percentage_viewed: row.averageViewPercentage == null ? null : Number(row.averageViewPercentage),
       };
     }
-    async function analyticsReport(channelId, start, end, extra) {
+    async function analyticsReport(channelId, start, end, extra, metrics) {
       const params = new URLSearchParams({
         ids: "channel==" + channelId,
         startDate: start,
         endDate: end,
-        metrics: "views,estimatedMinutesWatched,subscribersGained,averageViewDuration,averageViewPercentage,impressions,impressionClickThroughRate",
+        metrics: metrics || ANALYTICS_METRICS_FULL,
       });
       if (extra) {
         Object.keys(extra).forEach((k) => params.set(k, String(extra[k])));
       }
       return ytFetch("https://youtubeanalytics.googleapis.com/v2/reports?" + params.toString());
     }
-    async function fetchChannelsByIds(ids) {
-      const unique = [...new Set(ids.filter(Boolean))];
-      const out = {};
-      for (let i = 0; i < unique.length; i += 50) {
-        const chunk = unique.slice(i, i + 50);
-        const data = await ytFetch("https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id=" + encodeURIComponent(chunk.join(",")) + "&maxResults=50");
-        for (const item of data.items || []) out[item.id] = item;
+    async function analyticsReportWithFallback(channelId, start, end, extra) {
+      try {
+        return await analyticsReport(channelId, start, end, extra, ANALYTICS_METRICS_FULL);
+      } catch (err) {
+        if (err && (err.status === 400 || /not supported|incompatible|unknown metric/i.test(formatApiError(err)))) {
+          return await analyticsReport(channelId, start, end, extra, ANALYTICS_METRICS_BASIC);
+        }
+        throw err;
       }
-      return out;
+    }
+    async function fetchChannelById(id) {
+      const data = await ytFetch("https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id=" + encodeURIComponent(id) + "&maxResults=1");
+      return (data && data.items && data.items[0]) || null;
+    }
+    async function fetchChannelsByIds(ids) {
+      const unique = [...new Set((ids || []).filter(Boolean))];
+      const out = {};
+      const errors = [];
+      for (const id of unique) {
+        try {
+          const item = await fetchChannelById(id);
+          if (item) out[id] = item;
+        } catch (err) {
+          errors.push({ id: id, error: formatApiError(err, "ดึงข้อมูลสาธารณะของช่อง " + id + " ไม่สำเร็จ") });
+        }
+      }
+      return { channels: out, errors: errors };
     }
     async function fetchVideosByIds(ids) {
-      const unique = [...new Set(ids.filter(Boolean))];
+      const unique = [...new Set((ids || []).filter(Boolean))];
       const out = {};
+      const errors = [];
       for (let i = 0; i < unique.length; i += 50) {
         const chunk = unique.slice(i, i + 50);
-        const data = await ytFetch("https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&id=" + encodeURIComponent(chunk.join(",")) + "&maxResults=50");
-        for (const item of data.items || []) out[item.id] = item;
+        try {
+          const data = await ytFetch("https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&id=" + encodeURIComponent(chunk.join(",")) + "&maxResults=50");
+          for (const item of (data && data.items) || []) out[item.id] = item;
+        } catch (err) {
+          errors.push({ ids: chunk, error: formatApiError(err, "ดึงยอดคลิปสาธารณะไม่สำเร็จ") });
+        }
       }
-      return out;
+      return { videos: out, errors: errors };
     }
     function mergeLiveIntoSnapshot(live) {
       const data = deepClone(snapshotData);
       const studio = data.sources && data.sources.studio;
       if (studio && studio.channels) {
         for (const ch of studio.channels) {
-          const pub = live.channels[ch.id];
-          const an = live.analytics[ch.id];
+          const pub = live.channels && live.channels[ch.id];
+          const an = live.analytics && live.analytics[ch.id];
           const lifeStats = pub && pub.statistics ? pub.statistics : null;
           ch.live = {
             data_api_ok: !!lifeStats,
@@ -1347,7 +1407,7 @@
       const ta = data.sources && data.sources.tubealfred;
       if (ta) {
         for (const v of ta.outliers || []) {
-          const item = live.videos[v.id];
+          const item = live.videos && live.videos[v.id];
           if (item && item.statistics) {
             v.views_live = Number(item.statistics.viewCount || 0);
             if (item.contentDetails && item.contentDetails.duration) {
@@ -1359,84 +1419,117 @@
           }
         }
       }
-      // advice stays as in snapshot
       return data;
+    }
+    async function pullAnalyticsForChannel(id, range) {
+      const result = { ok: false, last28: null, videos: [], error: null };
+      let overview = null;
+      try {
+        overview = await analyticsReportWithFallback(id, range.start, range.end);
+        result.last28 = metricsFromRow(parseReport(overview)[0]);
+        result.ok = true;
+      } catch (err) {
+        result.error = formatApiError(err, "Analytics ของช่องนี้ดึงไม่ได้");
+        return result;
+      }
+      try {
+        const videoReport = await analyticsReportWithFallback(id, range.start, range.end, { dimensions: "video", sort: "-views", maxResults: 10 });
+        const videoRows = parseReport(videoReport);
+        const vids = videoRows.map((r) => r.video).filter(Boolean);
+        let vmeta = {};
+        if (vids.length) {
+          const fetched = await fetchVideosByIds(vids);
+          vmeta = fetched.videos || {};
+        }
+        result.videos = videoRows.map((r) => {
+          const meta = vmeta[r.video] || {};
+          const stats = metricsFromRow(r) || {};
+          const sn = meta.snippet || {};
+          return {
+            id: r.video,
+            title: sn.title || r.video,
+            url: "https://www.youtube.com/watch?v=" + r.video,
+            views: stats.views,
+            views_28d: stats.views,
+            views_lifetime: meta.statistics ? Number(meta.statistics.viewCount || 0) : null,
+            subscribers: stats.subscribers_attributed,
+            average_percentage_viewed: stats.average_percentage_viewed,
+            ctr_percent: stats.ctr_percent,
+            duration_seconds: meta.contentDetails ? parseIsoDuration(meta.contentDetails.duration) : null,
+          };
+        });
+      } catch (err) {
+        result.error = formatApiError(err, "ดึงยอดรวม 28 วันได้ แต่ดึงรายคลิปของช่องนี้ไม่ได้");
+      }
+      return result;
     }
     async function pullLive() {
       const range = last28Range();
       const studioCh = (((snapshotData || {}).sources || {}).studio || {}).channels || [];
-      const ownedIds = studioCh.map((c) => c.id).filter(Boolean);
+      const fromSnapshot = studioCh.map((c) => c.id).filter(Boolean);
+      const ownedIds = [...new Set(KNOWN_CHANNEL_IDS.concat(fromSnapshot))];
       const ta = ((snapshotData || {}).sources || {}).tubealfred || {};
       const peerIds = (ta.peers || []).map((p) => p.id).filter(Boolean);
       const videoIds = (ta.outliers || []).map((v) => v.id).filter(Boolean);
-      const channels = await fetchChannelsByIds(ownedIds.concat(peerIds));
+
+      const publicOwned = await fetchChannelsByIds(ownedIds);
+      const publicPeers = await fetchChannelsByIds(peerIds);
+      const channels = Object.assign({}, publicOwned.channels, publicPeers.channels);
+      const channelErrors = (publicOwned.errors || []).concat(publicPeers.errors || []);
+
       let mineNote = "";
       try {
         const mine = await ytFetch("https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&mine=true");
         const mineItem = (mine.items || [])[0];
         if (mineItem && mineItem.id && ownedIds.indexOf(mineItem.id) === -1) {
-          mineNote = "บัญชีที่เข้าสู่ระบบมีช่อง «" + ((mineItem.snippet && mineItem.snippet.title) || mineItem.id) + "» ซึ่งไม่ใช่ 4 ช่องในแดชบอร์ดนี้ ลองออกแล้วเข้าใหม่ด้วย sitthinon.ma@gmail.com";
+          mineNote = "channels?mine=true คืนช่อง «" + ((mineItem.snippet && mineItem.snippet.title) || mineItem.id) + "» ซึ่งไม่ใช่หนึ่งใน 4 ช่องที่เรารู้จัก (บัญชีแบรนด์อาจต้องเลือกช่องตอนเข้าสู่ระบบ) แดชบอร์ดยังดึงยอดสาธารณะด้วย channels?id= และลอง Analytics ทีละช่องด้วย channel==ID";
         }
       } catch (err) {
-        // mine=true is optional; owned analytics may still work
+        mineNote = formatApiError(err, "channels?mine=true ใช้ไม่ได้ ซึ่งเป็นเรื่องปกติของช่องแบรนด์");
       }
+
       const analytics = {};
-      let studioError = null;
+      const analyticsErrors = [];
       let anyAnalytics = false;
+      let anyPublic = Object.keys(publicOwned.channels).length > 0;
       for (const id of ownedIds) {
-        try {
-          const overview = await analyticsReport(id, range.start, range.end);
-          const videoReport = await analyticsReport(id, range.start, range.end, { dimensions: "video", sort: "-views", maxResults: 10 });
-          const last28 = metricsFromRow(parseReport(overview)[0]);
-          const videoRows = parseReport(videoReport);
-          const vids = videoRows.map((r) => r.video).filter(Boolean);
-          const vmeta = await fetchVideosByIds(vids);
-          const videos = videoRows.map((r) => {
-            const meta = vmeta[r.video] || {};
-            const stats = metricsFromRow(r) || {};
-            const sn = meta.snippet || {};
-            return {
-              id: r.video,
-              title: sn.title || r.video,
-              url: "https://www.youtube.com/watch?v=" + r.video,
-              views: stats.views,
-              views_28d: stats.views,
-              views_lifetime: meta.statistics ? Number(meta.statistics.viewCount || 0) : null,
-              subscribers: stats.subscribers_attributed,
-              average_percentage_viewed: stats.average_percentage_viewed,
-              ctr_percent: stats.ctr_percent,
-              duration_seconds: meta.contentDetails ? parseIsoDuration(meta.contentDetails.duration) : null,
-            };
-          });
-          analytics[id] = { ok: true, last28: last28, videos: videos };
-          anyAnalytics = true;
-        } catch (err) {
-          analytics[id] = { ok: false, error: classifyLiveError(err) };
-          if (!studioError) studioError = classifyLiveError(err);
+        const an = await pullAnalyticsForChannel(id, range);
+        analytics[id] = an;
+        if (an.ok) anyAnalytics = true;
+        if (an.error) {
+          const ch = studioCh.find((c) => c.id === id);
+          analyticsErrors.push((ch && ch.name ? ch.name : id) + ": " + an.error);
         }
       }
-      if (ownedIds.length && !anyAnalytics && studioError) {
-        // keep studioError
-      } else if (anyAnalytics) {
-        const failed = ownedIds.filter((id) => analytics[id] && !analytics[id].ok).length;
-        studioError = failed ? ("ดึง Analytics ได้บางช่อง ช่องที่ดึงไม่ได้ยังใช้สำเนา 28 วัน") : null;
+
+      let studioError = null;
+      if (!anyPublic && publicOwned.errors.length) {
+        studioError = publicOwned.errors.map((e) => e.error).join(" ");
+      } else if (!anyAnalytics && analyticsErrors.length) {
+        studioError = "ยอดสาธารณะดึงได้บางส่วน แต่ Analytics ดึงไม่ได้: " + analyticsErrors.join(" | ");
+      } else if (analyticsErrors.length) {
+        studioError = "ดึงได้บางช่อง ช่องที่ไม่ได้ยังใช้สำเนา 28 วัน — " + analyticsErrors.join(" | ");
+      } else if (channelErrors.length && !anyPublic) {
+        studioError = channelErrors.map((e) => e.error).join(" ");
       }
-      let videos = {};
+
+      const videoPack = await fetchVideosByIds(videoIds);
       let competitorError = null;
-      try {
-        videos = await fetchVideosByIds(videoIds);
-      } catch (err) {
-        competitorError = classifyLiveError(err);
+      if (videoPack.errors && videoPack.errors.length) {
+        if (!Object.keys(videoPack.videos).length) competitorError = videoPack.errors.map((e) => e.error).join(" ");
+        else competitorError = "ดึงยอดคู่แข่งได้บางคลิป: " + videoPack.errors.map((e) => e.error).join(" | ");
       }
+
       return {
         fetchedAt: nowBangkokIso(),
         range: range,
         channels: channels,
         analytics: analytics,
-        videos: videos,
+        videos: videoPack.videos || {},
         studioError: studioError,
         competitorError: competitorError,
         mineNote: mineNote,
+        channelErrors: analyticsErrors,
       };
     }
     async function startLive(prompt) {
@@ -1444,28 +1537,42 @@
       liveMeta.status = "connecting";
       liveMeta.studioError = null;
       liveMeta.competitorError = null;
+      liveMeta.channelErrors = [];
+      liveMeta.mineNote = "";
       renderPage(deepClone(snapshotData));
       try {
         const needPrompt = prompt || (accessToken && Date.now() < tokenExpiresAt ? "" : "consent");
         if (!accessToken || Date.now() >= tokenExpiresAt || prompt === "consent") {
-          await requestAccessToken(needPrompt);
+          const tok = await requestAccessToken(needPrompt);
+          if (tok && tok.granted === false) {
+            liveMeta.mineNote = "สิทธิ์ที่ให้ยังไม่ครบ youtube.readonly และ yt-analytics.readonly ลองกดเชื่อมต่ออีกครั้งแล้วอนุญาตทั้งสองสิทธิ์";
+          }
         }
         const live = await pullLive();
-        liveMeta.status = "ok";
+        liveMeta.status = (live.studioError && !(live.channels && Object.keys(live.channels).length) && !(live.analytics && Object.keys(live.analytics).some((k) => live.analytics[k] && live.analytics[k].ok))) ? "error" : "ok";
+        if (liveMeta.mineNote && live.mineNote) live.mineNote = liveMeta.mineNote + " " + live.mineNote;
+        else if (liveMeta.mineNote) live.mineNote = liveMeta.mineNote;
         liveMeta.fetchedAt = live.fetchedAt;
         liveMeta.studioError = live.studioError;
         liveMeta.competitorError = live.competitorError;
         liveMeta.mineNote = live.mineNote || "";
-        renderPage(mergeLiveIntoSnapshot(live));
+        liveMeta.channelErrors = live.channelErrors || [];
+        try {
+          renderPage(mergeLiveIntoSnapshot(live));
+        } catch (renderErr) {
+          liveMeta.studioError = (liveMeta.studioError ? liveMeta.studioError + " " : "") + formatApiError(renderErr, "ได้ข้อมูลสดแล้วแต่แสดงผลไม่สำเร็จ");
+          renderPage(deepClone(snapshotData));
+        }
       } catch (err) {
         liveMeta.status = "error";
-        const reason = classifyLiveError(err);
+        const reason = formatApiError(err);
         liveMeta.studioError = reason;
         liveMeta.competitorError = reason;
         liveMeta.error = reason;
         renderPage(deepClone(snapshotData));
       }
     }
+
     function signOutYoutube() {
       const done = () => {
         accessToken = null;
