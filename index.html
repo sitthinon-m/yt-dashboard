@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>แดชบอร์ดช่อง YouTube — 25 ต.ค.–21 พ.ย. 2026</title>
+  <title>แดชบอร์ดช่อง YouTube — 29 ต.ค.–25 พ.ย. 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=Prompt:wght@500;600;700&display=swap" rel="stylesheet">
@@ -661,25 +661,25 @@
       const t = ch.totals;
       const w = ch.published_in_window || {};
       if (ch.key === "ai-arai-kan-nee") {
-        return "คลิปแมวที่ลงในช่วงนี้ 6 คลิป ได้ " + fmt(w.cat.views) +
+        return "คลิปแมวที่ลงในช่วงนี้ " + fmt(w.cat && w.cat.n) + " คลิป ได้ " + fmt(w.cat.views) +
           " วิว มัธยฐาน " + fmt(w.cat.median_views) + " และผู้ติดตามจากคลิป " + fmt(w.cat.subscribers_attributed) +
-          " จาก " + fmt(t.subscribers_attributed) + " ทั้งช่อง คลิปข่าว AI ที่ลงช่วงเดียวกัน 22 คลิป ได้วิวมัธยฐานแค่ " +
-          fmt(w.news_shorts.median_views) + " คลิปเก่าเรื่องแกล้งมิจฉาชีพยังดึงได้ 13,504 วิวในช่วงนี้ แต่ได้ผู้ติดตามแค่ 1 คน การแยกแมวกับข่าวดูจากชื่อคลิป (สมมติฐาน)";
+          " จาก " + fmt(t.subscribers_attributed) + " ทั้งช่อง คลิปข่าว AI ที่ลงช่วงเดียวกัน " + fmt(w.news_shorts && w.news_shorts.n) + " คลิป ได้วิวมัธยฐานแค่ " +
+          fmt(w.news_shorts.median_views) + " คลิปเก่าเรื่องแกล้งมิจฉาชีพยังดึงได้ 4,616 วิวในช่วงนี้ แต่ได้ผู้ติดตามแค่ 1 คน การแยกแมวกับข่าวดูจากชื่อคลิป (สมมติฐาน)";
       }
       if (ch.key === "lion-lykan") {
-        return "คลิปเดียว «ทำไมกินแต่ฝรั่ง?» ได้ 77,872 วิว และผู้ติดตามที่โยงกับคลิปนี้ 182 คน คนดูวนซ้ำจนเปอร์เซ็นต์การดูทั้งช่อง " +
+        return "คลิปเดียว «ทำไมกินแต่ฝรั่ง?» ได้ 314,135 วิว และผู้ติดตามที่โยงกับคลิปนี้ 506 คน คนดูวนซ้ำจนเปอร์เซ็นต์การดูทั้งช่อง " +
           fmtPct(t.average_percentage_viewed) + " แถวรวมของ Studio บอกผู้ติดตามจากคลิปทั้งช่อง " +
           fmt(t.subscribers_attributed) + " คน ซึ่งสูงกว่าผลรวมรายคลิปในตาราง";
       }
       if (ch.key === "raisarapai") {
-        return "คลิปแมว 2 คลิปได้วิวหลักพัน ส่วนคลิปยาวเรื่องสงครามโลกได้ 108 วิว ทั้งที่ภาพปกโชว์ 3,694 ครั้ง CTR 1.87% และคนดูจบเฉลี่ย 38.71%";
+        return "คลิปแมวที่ลงช่วงนี้ 5 คลิปได้วิวหลักพัน 3 คลิป ส่วนคลิปยาวเรื่องสงครามโลกได้ 111 วิว CTR 1.87% และคนดูจบเฉลี่ย 38.11%";
       }
       if (ch.key === "english-with-meow") {
         const life = lifetimeTotals(ch);
         const lifeBit = life && life.views != null
           ? " ตลอดชีพในไฟล์ Studio ได้ " + fmt(life.views) + " วิว และผู้ติดตามจากคลิป " + fmt(life.subscribers_attributed ?? life.subscribers)
           : "";
-        return "ลง 36 คลิปในช่วง 28 วันนี้ แต่ภาพปกโชว์แค่ 126 ครั้ง ได้ 3 วิว และไม่ได้ผู้ติดตามจากคลิป" + lifeBit + " ปัญหาตอนนี้คือคนยังไม่เจอช่อง ไม่ใช่แค่คนดูไม่จบ";
+        return "ในตารางช่วง 28 วันนี้มี 4 คลิปที่ได้วิว รวม 6 วิว ภาพปกโชว์ 71 ครั้ง และไม่ได้ผู้ติดตามจากคลิป" + lifeBit + " ปัญหาตอนนี้คือคนยังไม่เจอช่อง ไม่ใช่แค่คนดูไม่จบ";
       }
       return "";
     }
@@ -875,7 +875,7 @@
 
       const take = el("p");
       take.innerHTML = "";
-      section.append(el("p", { text: "สรุปสั้นๆ: คลิปแมวพาทั้งวิวและผู้ติดตาม ข่าว AI ที่ลงช่วงนี้มัธยฐานแค่ 46 วิว ยกเว้นคลิปเก่าเรื่องแกล้งมิจฉาชีพที่ได้ 13,504 วิวต่อในช่วงนี้ แต่ได้ผู้ติดตามแค่ 1 คน" }));
+      section.append(el("p", { text: "สรุปสั้นๆ: คลิปแมวพาทั้งวิวและผู้ติดตาม ข่าว AI ที่ลงช่วงนี้มัธยฐานแค่ 78 วิว ยกเว้นคลิปเก่าเรื่องแกล้งมิจฉาชีพที่ได้ 4,616 วิวต่อในช่วงนี้ แต่ได้ผู้ติดตามแค่ 1 คน" }));
       if (src.note) section.append(el("p", { class: "caveat", text: src.note }));
       return section;
     }
@@ -1081,7 +1081,7 @@
         if (t.stretch) li.append(el("div", { text: "เป้าเผื่อ: " + t.stretch }));
         li.append(el("div", { text: t.assumption }));
         li.append(el("div", { text: "คำอธิบายอื่น: " + t.competing }));
-        li.append(el("div", { class: "muted", text: "สถานะ ณ 23 พ.ย. 2026 เวลาไทย: " + t.status }));
+        li.append(el("div", { class: "muted", text: "สถานะ ณ 27 พ.ย. 2026 เวลาไทย: " + t.status }));
         ol.append(li);
       }
       section.append(ol);
